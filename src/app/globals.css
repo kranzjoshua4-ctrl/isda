@@ -1,0 +1,262 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-tech: var(--tech);
+  --color-tech-foreground: var(--tech-foreground);
+  --color-tech-accent: var(--tech-accent);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Warm off-white / nebel-slate — kein Babyblau */
+  --background: #f4f7fa;
+  --foreground: #111827;
+  --card: #fdfdff;
+  --card-foreground: #111827;
+  --popover: #fdfdff;
+  --popover-foreground: #111827;
+  --primary: #183b5b;
+  --primary-foreground: #f6f8fb;
+  --secondary: #e9eef5;
+  --secondary-foreground: #1e293b;
+  --muted: #eef3f7;
+  --muted-foreground: #64748b;
+  --accent: #e9eef5;
+  --accent-foreground: #0f172a;
+  /* Automotive Navy — Akzent / CTA */
+  --tech: #1f4e79;
+  --tech-foreground: #f5f8fb;
+  --tech-accent: #2f6fa3;
+  --destructive: oklch(0.55 0.22 25);
+  --border: color-mix(in srgb, #94a3b8 38%, transparent);
+  --input: color-mix(in srgb, #64748b 22%, #f1f5f9 78%);
+  --ring: color-mix(in srgb, #1f4e79 42%, transparent);
+  --chart-1: #1f4e79;
+  --chart-2: #475569;
+  --chart-3: #64748b;
+  --chart-4: #334155;
+  --chart-5: #1e293b;
+  --radius: 0.75rem;
+  --sidebar: #1d232a;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #1f4e79;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #2a3038;
+  --sidebar-accent-foreground: #f1f5f9;
+  --sidebar-border: rgb(255 255 255 / 8%);
+  --sidebar-ring: #2f6fa3;
+}
+
+.dark {
+  --background: oklch(0.16 0.02 260);
+  --foreground: oklch(0.96 0.01 250);
+  --card: oklch(0.2 0.02 260);
+  --card-foreground: oklch(0.96 0.01 250);
+  --popover: oklch(0.2 0.02 260);
+  --popover-foreground: oklch(0.96 0.01 250);
+  --primary: oklch(0.96 0.01 250);
+  --primary-foreground: oklch(0.18 0.02 260);
+  --secondary: oklch(0.26 0.02 260);
+  --secondary-foreground: oklch(0.96 0.01 250);
+  --muted: oklch(0.26 0.02 260);
+  --muted-foreground: oklch(0.68 0.02 250);
+  --accent: oklch(0.28 0.04 240);
+  --accent-foreground: oklch(0.96 0.01 250);
+  --tech: #3d7ab8;
+  --tech-foreground: #f8fafc;
+  --tech-accent: #5a9fd4;
+  --destructive: oklch(0.65 0.2 22);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.52 0.1 250);
+  --chart-1: oklch(0.55 0.11 248);
+  --chart-2: oklch(0.55 0.02 250);
+  --chart-3: oklch(0.45 0.02 250);
+  --chart-4: oklch(0.35 0.02 250);
+  --chart-5: oklch(0.28 0.02 250);
+  --sidebar: oklch(0.14 0.02 260);
+  --sidebar-foreground: oklch(0.96 0.01 250);
+  --sidebar-primary: oklch(0.52 0.1 250);
+  --sidebar-primary-foreground: oklch(0.99 0.01 250);
+  --sidebar-accent: oklch(0.24 0.02 260);
+  --sidebar-accent-foreground: oklch(0.98 0.01 250);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.52 0.1 250);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground antialiased selection:bg-tech/18 selection:text-foreground;
+    background-color: var(--background);
+    background-image:
+      radial-gradient(ellipse 120% 70% at 50% -18%, rgb(255 255 255 / 0.92), transparent 52%),
+      radial-gradient(ellipse 85% 55% at 100% 0%, rgb(233 238 245 / 0.65), transparent 50%),
+      radial-gradient(ellipse 80% 50% at 0% 100%, rgb(237 242 247 / 0.55), transparent 48%),
+      linear-gradient(180deg, #f7fafc 0%, #eef3f7 42%, #e9eef5 100%);
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+}
+
+@layer utilities {
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+  .text-balance-safe {
+    text-wrap: balance;
+  }
+  /* Weiche Tech-Farbverläufe ohne Gitterlinien */
+  .bg-atmosphere {
+    background-image:
+      linear-gradient(
+        125deg,
+        rgb(31 78 121 / 0.04) 0%,
+        transparent 38%,
+        rgb(15 23 42 / 0.03) 62%,
+        rgb(31 78 121 / 0.035) 100%
+      ),
+      radial-gradient(ellipse 100% 80% at 48% -6%, rgb(255 255 255 / 0.45), transparent 55%),
+      radial-gradient(ellipse 90% 70% at 100% 40%, rgb(226 232 240 / 0.35), transparent 52%),
+      radial-gradient(ellipse 85% 65% at 0% 88%, rgb(241 245 249 / 0.5), transparent 50%);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .shadow-tech {
+    box-shadow:
+      0 0 0 1px rgb(15 23 42 / 0.05),
+      0 2px 6px rgb(15 23 42 / 0.04),
+      0 18px 48px -18px rgb(15 23 42 / 0.14);
+  }
+  .shadow-tech-lg {
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.06) inset,
+      0 1px 0 rgb(15 23 42 / 0.04),
+      0 22px 56px -22px rgb(15 23 42 / 0.18);
+  }
+  .glow-ring {
+    box-shadow:
+      0 0 0 1px rgb(31 78 121 / 0.38),
+      0 0 0 4px rgb(31 78 121 / 0.09),
+      0 14px 40px -12px rgb(31 78 121 / 0.2);
+  }
+  .glow-hover {
+    transition: box-shadow 0.25s ease, transform 0.2s ease;
+  }
+  .glow-hover:hover {
+    box-shadow:
+      0 0 0 1px rgb(31 78 121 / 0.22),
+      0 10px 36px -12px rgb(15 23 42 / 0.12);
+  }
+  .shadow-premium-sm {
+    box-shadow:
+      0 0 0 1px rgb(15 23 42 / 0.05),
+      0 2px 6px rgb(15 23 42 / 0.035),
+      0 16px 44px -18px rgb(15 23 42 / 0.12);
+  }
+  .shadow-premium {
+    box-shadow:
+      0 0 0 1px rgb(15 23 42 / 0.055),
+      0 20px 52px -20px rgb(15 23 42 / 0.16);
+  }
+  /* Primär-CTAs: schwarz / Anthrazit, dezenter Glanz */
+  .bg-cta-navy {
+    background-image: linear-gradient(135deg, #0a0a0a 0%, #171717 100%);
+  }
+  .hover\:bg-cta-navy-hover:hover {
+    background-image: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
+  }
+  .shadow-cta {
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.18) inset,
+      0 10px 24px rgb(0 0 0 / 0.32);
+  }
+  .shadow-cta-hover:hover {
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.14) inset,
+      0 14px 32px rgb(0 0 0 / 0.38);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+/*
+ * Next.js Dev: `<nextjs-portal>` (z. B. unter `script[data-nextjs-dev-overlay]`)
+ * bleibt im Development für das Error-Overlay im Shadow DOM vorgesehen — auch wenn
+ * `devIndicators: false` gesetzt ist (siehe next.config.ts).
+ * Wir setzen den Host auf Nullfläche, damit Layout- und DOM-Inspektor weniger „leeres
+ * Kästchen“ melden; Inhalt im Shadow Root nutzt typischerweise weiter `position: fixed`.
+ */
+nextjs-portal {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: visible;
+}
