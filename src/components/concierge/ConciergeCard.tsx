@@ -28,12 +28,12 @@ export function ConciergeCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-[rgba(148,163,184,0.28)] bg-white/90 p-4 shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-sm transition duration-300",
+        "group relative overflow-hidden rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-4 shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-sm transition duration-300",
         "hover:border-[#0a0a0a]/22 hover:shadow-[0_20px_52px_-20px_rgba(15,23,42,0.12),0_8px_22px_rgba(15,23,42,0.06)]",
         className,
       )}
     >
-      <div className="pointer-events-none absolute inset-px rounded-[11px] bg-gradient-to-b from-white/80 to-transparent opacity-50" />
+      <div className="pointer-events-none absolute inset-px rounded-none bg-gradient-to-b from-white/80 to-transparent opacity-50" />
       <div className="relative flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
@@ -52,7 +52,7 @@ export function ConciergeCard({
         {icon ? (
           <div
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-lg border border-[rgba(148,163,184,0.35)] bg-[#f8fafc] text-[#0a0a0a] transition",
+              "flex size-10 shrink-0 items-center justify-center rounded-none border border-[rgba(148,163,184,0.35)] bg-[#f8fafc] text-[#0a0a0a] transition",
               "group-hover:border-[#0a0a0a]/25 group-hover:bg-white",
             )}
           >

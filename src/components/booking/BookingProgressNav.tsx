@@ -77,19 +77,19 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
               ],
             }}
             transition={{ duration: 1.1, delay: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
-            className="rounded-full bg-cta-navy px-3 py-1.5 text-white"
+            className="rounded-none bg-cta-premium px-3.5 py-1.5 text-[#111111] shadow-cta-gold"
           >
             {label}
           </motion.span>
         ) : isDone ? (
           <Link
             href={s.href}
-            className="rounded-full border border-[rgba(148,163,184,0.35)] bg-[#eef0f3] px-3 py-1.5 text-[#475569] transition duration-200 hover:border-[#0a0a0a]/40 hover:bg-[#e4e6ea] hover:text-[#0a0a0a]"
+            className="rounded-none border border-[#eaeaea] bg-white px-3.5 py-1.5 text-[#6b6b6b] transition duration-200 hover:border-premium/30 hover:text-[#111111]"
           >
             {label}
           </Link>
         ) : (
-          <span className="rounded-full border border-[rgba(148,163,184,0.28)] bg-[#eef0f3] px-3 py-1.5 text-[#64748b]">
+          <span className="rounded-none border border-[#eaeaea] bg-[#f8f8f7] px-3.5 py-1.5 text-[#9a9a9a]">
             {label}
           </span>
         );
@@ -103,7 +103,7 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
             {node}
             {i < STEPS.length - 1 ? (
               <motion.span variants={chevronVariants} className="inline-flex">
-                <ChevronRight className="size-3.5 shrink-0 text-[#94a3b8]" aria-hidden />
+                <ChevronRight className="size-3.5 shrink-0 text-[#c9a227]/70" aria-hidden />
               </motion.span>
             ) : null}
           </motion.span>

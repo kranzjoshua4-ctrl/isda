@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import {
   Building2,
@@ -15,22 +16,6 @@ import {
 
 const SITE_URL = "https://ichsuchdeinauto.de";
 
-export const metadata: Metadata = {
-  title: "Impressum",
-  description:
-    "Impressum der Autoecke-Kostheim (Inhaber Serkan Tekten): Angaben gemäß § 5 TMG, Kontakt, Steuer- und Umsatzsteuer-IDs, Haftungsausschluss und Urheberrecht.",
-  alternates: { canonical: `${SITE_URL}/impressum` },
-  robots: { index: true, follow: true },
-  openGraph: {
-    title: "Impressum · Autoecke-Kostheim",
-    description:
-      "Rechtliche Anbieterkennzeichnung und Pflichtangaben gemäß TMG und RStV.",
-    url: `${SITE_URL}/impressum`,
-    locale: "de_DE",
-    type: "website",
-  },
-};
-
 const business = {
   name: "Autoecke-Kostheim",
   owner: "Serkan Tekten",
@@ -44,7 +29,7 @@ const business = {
 
 function SectionIcon({ children }: { children: React.ReactNode }) {
   return (
-    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-tech/35 bg-gradient-to-b from-tech/20 to-tech/5 text-tech shadow-[inset_0_1px_0_0_oklch(1_0_0/0.12)] transition duration-300 group-hover:border-tech/55 group-hover:from-tech/30 group-hover:to-tech/10 group-hover:shadow-[0_0_20px_-4px_oklch(0.42_0.09_252/0.45)]">
+    <span className="flex size-10 shrink-0 items-center justify-center rounded-none border border-tech/35 bg-gradient-to-b from-tech/20 to-tech/5 text-tech shadow-[inset_0_1px_0_0_oklch(1_0_0/0.12)] transition duration-300 group-hover:border-tech/55 group-hover:from-tech/30 group-hover:to-tech/10 group-hover:shadow-[0_0_20px_-4px_oklch(0.42_0.09_252/0.45)]">
       {children}
     </span>
   );
@@ -67,7 +52,7 @@ function ImpressumSection({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className="group scroll-mt-24 rounded-xl border border-border/90 bg-card/35 px-5 py-6 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-tech/40 hover:bg-card/55 hover:shadow-[0_0_36px_-12px_oklch(0.42_0.09_252/0.22)] sm:px-6 sm:py-7"
+      className="group scroll-mt-24 rounded-none border border-border/90 bg-card/35 px-5 py-6 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-tech/40 hover:bg-card/55 hover:shadow-[0_0_36px_-12px_oklch(0.42_0.09_252/0.22)] sm:px-6 sm:py-7"
     >
       <div className="flex gap-4">
         <SectionIcon>{icon}</SectionIcon>
@@ -148,7 +133,7 @@ export default function ImpressumPage() {
             </p>
           </header>
 
-          <div className="rounded-2xl border border-border/90 bg-card/50 p-5 shadow-tech-lg backdrop-blur-2xl ring-1 ring-tech/15 sm:p-8 md:p-10">
+          <div className="rounded-none border border-border/90 bg-card/50 p-5 shadow-tech-lg backdrop-blur-2xl ring-1 ring-tech/15 sm:p-8 md:p-10">
             <div className="space-y-4 sm:space-y-5">
               <ImpressumSection
                 id="tmg"
@@ -206,7 +191,7 @@ export default function ImpressumPage() {
                   <span>
                     <span className="font-medium text-foreground/90">E-Mail:</span>{" "}
                     <a
-                      className="rounded-md font-medium text-tech underline decoration-tech/50 underline-offset-4 transition hover:text-tech hover:decoration-tech"
+                      className="rounded-none font-medium text-tech underline decoration-tech/50 underline-offset-4 transition hover:text-tech hover:decoration-tech"
                       href="mailto:kontakt@ichsuchdeinauto.de"
                     >
                       kontakt@ichsuchdeinauto.de
@@ -215,7 +200,7 @@ export default function ImpressumPage() {
                     Onlineangebot)
                   </span>
                 </p>
-                <p className="rounded-lg border border-tech/20 bg-tech/[0.06] px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
+                <p className="rounded-none border border-tech/20 bg-tech/[0.06] px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
                   Hinweis: Vertragliche oder buchhalterische Anfragen bitte eindeutig an den oben
                   genannten Anbieter adressieren. Informationen zur Datenverarbeitung finden Sie in
                   unserer{" "}

@@ -52,6 +52,7 @@ const brands = [
 
 const bodyWords = [
   "SUV",
+  "Jeep",
   "Offroader",
   "Geländewagen",
   "Touring",
@@ -70,6 +71,7 @@ const bodyWords = [
   "Bus",
   "Multivan",
   "Pickup",
+  "Pick-up",
   "Targa",
 ];
 

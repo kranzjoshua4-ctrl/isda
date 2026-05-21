@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "logos:optimize": "node scripts/normalize-brand-logos.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

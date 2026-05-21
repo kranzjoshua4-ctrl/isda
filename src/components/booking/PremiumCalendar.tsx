@@ -51,7 +51,7 @@ export function PremiumCalendar({ selected, onSelect, className }: PremiumCalend
               onClick={() => onSelect(d)}
               aria-pressed={active}
               className={cn(
-                "group relative flex min-h-[4.25rem] flex-col items-center justify-center rounded-xl border px-1.5 py-2.5 text-center transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out",
+                "group relative flex min-h-[4.25rem] flex-col items-center justify-center rounded-none border px-1.5 py-2.5 text-center transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8fafc]",
                 active
                   ? "border-transparent bg-cta-navy text-white shadow-[0_12px_28px_-8px_rgba(0,0,0,0.42)]"

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import {
   Building2,
@@ -19,22 +20,6 @@ import {
 } from "lucide-react";
 
 const SITE_URL = "https://ichsuchdeinauto.de";
-
-export const metadata: Metadata = {
-  title: "Datenschutzerklärung",
-  description:
-    "Datenschutzerklärung gemäß DSGVO und BDSG für ichsuchdeinauto.de (Inhaber Serkan Tekten, Autoecke-Kostheim): Verantwortlicher, Datenkategorien, Rechtsgrundlagen, Drittlandtransfers, Betroffenenrechte und Beschwerderecht.",
-  alternates: { canonical: `${SITE_URL}/datenschutz` },
-  robots: { index: true, follow: true },
-  openGraph: {
-    title: "Datenschutzerklärung · ichsuchdeinauto.de",
-    description:
-      "Informationen gemäß Art. 13/14 DSGVO zur Verarbeitung personenbezogener Daten auf ichsuchdeinauto.de.",
-    url: `${SITE_URL}/datenschutz`,
-    locale: "de_DE",
-    type: "website",
-  },
-};
 
 const business = {
   name: "Autoecke-Kostheim",
@@ -58,7 +43,7 @@ const supervisoryAuthority = {
 
 function SectionNumber({ n }: { n: number }) {
   return (
-    <span className="inline-flex h-7 min-w-[2.5rem] items-center justify-center rounded-full bg-cta-navy px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-cta">
+    <span className="inline-flex h-7 min-w-[2.5rem] items-center justify-center rounded-none bg-cta-navy px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-cta">
       § {String(n).padStart(2, "0")}
     </span>
   );
@@ -81,12 +66,12 @@ function PrivacySection({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className="group scroll-mt-28 rounded-2xl border border-[rgba(148,163,184,0.28)] bg-white/90 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.07),0_4px_14px_rgba(15,23,42,0.05)] backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_24px_64px_rgba(15,23,42,0.1),0_8px_22px_rgba(15,23,42,0.06)] sm:p-7"
+      className="group scroll-mt-28 rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.07),0_4px_14px_rgba(15,23,42,0.05)] backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_24px_64px_rgba(15,23,42,0.1),0_8px_22px_rgba(15,23,42,0.06)] sm:p-7"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
         <div className="flex items-center gap-3">
           <span
-            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[rgba(148,163,184,0.32)] bg-[#f8fafc] text-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(15,23,42,0.04)]"
+            className="flex size-10 shrink-0 items-center justify-center rounded-none border border-[rgba(148,163,184,0.32)] bg-[#f8fafc] text-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(15,23,42,0.04)]"
             aria-hidden
           >
             {icon}
@@ -174,7 +159,7 @@ export default function DatenschutzPage() {
 
         <nav
           aria-label="Inhaltsverzeichnis Datenschutzerklärung"
-          className="relative z-10 mb-10 rounded-2xl border border-[rgba(148,163,184,0.28)] bg-white/80 p-5 text-sm shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-md"
+          className="relative z-10 mb-10 rounded-none border border-[rgba(148,163,184,0.28)] bg-white/80 p-5 text-sm shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-md"
         >
           <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-[#64748b]">
             Inhalt
@@ -636,7 +621,7 @@ export default function DatenschutzPage() {
           </PrivacySection>
         </article>
 
-        <footer className="relative z-10 mt-12 rounded-2xl border border-[rgba(148,163,184,0.28)] bg-white/90 p-6 text-center text-xs leading-relaxed text-[#64748b] shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] sm:text-[13px]">
+        <footer className="relative z-10 mt-12 rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-6 text-center text-xs leading-relaxed text-[#64748b] shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] sm:text-[13px]">
           <p>
             Diese Datenschutzerklärung wurde mit größter Sorgfalt erstellt und auf die DSGVO sowie
             das BDSG abgestimmt. Sie ersetzt keine individuelle Rechtsberatung; bei rechtlichen

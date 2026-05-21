@@ -101,10 +101,10 @@ export function PaymentMethods({
               transition={{ delay: 0.03 * i, duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => onChange(id)}
               className={cn(
-                "group relative flex w-full items-center overflow-hidden rounded-lg border text-left transition-[transform,border-color,box-shadow,background-color] duration-200 ease-out",
+                "group relative flex w-full items-center overflow-hidden rounded-none border text-left transition-[transform,border-color,box-shadow,background-color] duration-200 ease-out",
                 compact
                   ? "min-h-[38px] gap-2 px-2.5 py-2 sm:gap-2 sm:px-2.5 sm:py-2"
-                  : "min-h-[44px] gap-2.5 rounded-xl px-3 py-2.5 sm:gap-3 sm:px-3.5 sm:py-2.5",
+                  : "min-h-[44px] gap-2.5 rounded-none px-3 py-2.5 sm:gap-3 sm:px-3.5 sm:py-2.5",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                 active
                   ? "border-[#0a0a0a]/45 bg-[rgba(10,10,10,0.06)] shadow-[0_0_0_1px_rgba(10,10,10,0.12),0_6px_18px_-10px_rgba(15,23,42,0.08)]"
@@ -113,8 +113,8 @@ export function PaymentMethods({
             >
               <span
                 className={cn(
-                  "flex shrink-0 items-center justify-center rounded-md border p-0.5",
-                  compact ? "size-8" : "size-9 rounded-lg p-1 sm:size-10",
+                  "flex shrink-0 items-center justify-center rounded-none border p-0.5",
+                  compact ? "size-8" : "size-9 rounded-none p-1 sm:size-10",
                   active
                     ? "border-[rgba(10,10,10,0.18)] bg-white"
                     : "border-[rgba(148,163,184,0.35)] bg-[#f8fafc]",
@@ -145,7 +145,7 @@ export function PaymentMethods({
               </span>
               <span
                 className={cn(
-                  "flex shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200",
+                  "flex shrink-0 items-center justify-center rounded-none border-2 transition-colors duration-200",
                   compact ? "size-4" : "size-5",
                   active
                     ? "border-[#0a0a0a] bg-cta-navy text-white"

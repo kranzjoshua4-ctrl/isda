@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { SelectionFunnel } from "@/components/concierge/SelectionFunnel";
 import { VoiceInputButton } from "@/components/concierge/VoiceInputButton";
 import { cn } from "@/lib/utils";
 import { useConciergeStore } from "@/store/concierge-store";
@@ -9,7 +10,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const PLACEHOLDERS = [
   "Ein fahrtüchtiger Kleinwagen mit gültigem TÜV und unter 200k Kilometer",
@@ -19,31 +20,6 @@ const PLACEHOLDERS = [
   "BMW M340i Touring, schwarz, unter 35.000 €",
 ];
 
-const BRAND_CHIPS = [
-  "BMW",
-  "Audi",
-  "Opel",
-  "VW",
-  "Renault",
-  "Suzuki",
-  "Toyota",
-  "Mercedes",
-  "Fiat",
-  "Hyundai",
-  "Seat",
-  "Peugeot",
-];
-
-const ATTRIBUTE_CHIPS = ["unter 5.000 €", "unter 10.000 €", "unter 20.000 €", "unter 30.000 €"];
-
-const TRENDING = [
-  "M340i Touring",
-  "Audi Q5",
-  "Model 3",
-  "Cupra Formentor",
-  "Golf GTI",
-];
-
 export function HeroInput() {
   const router = useRouter();
   const setVehicleRequest = useConciergeStore((s) => s.setVehicleRequest);
@@ -51,6 +27,8 @@ export function HeroInput() {
   const [submitting, setSubmitting] = useState(false);
   const [ix, setIx] = useState(0);
   const [focused, setFocused] = useState(false);
+  const [funnelComplete, setFunnelComplete] = useState(false);
+  const lastFunnelTextRef = useRef("");
 
   useEffect(() => {
     if (PLACEHOLDERS.length <= 1) return;
@@ -69,14 +47,33 @@ export function HeroInput() {
 
   const placeholder = PLACEHOLDERS[ix] ?? PLACEHOLDERS[0];
 
-  const append = useCallback((chunk: string) => {
-    setValue((prev) => {
-      const t = prev.trim();
-      if (!t) return chunk;
-      if (t.toLowerCase().includes(chunk.toLowerCase())) return t;
-      return `${t} ${chunk}`;
-    });
-  }, []);
+  const syncFunnelToText = useCallback(
+    (selections: {
+      brand: string | null;
+      bodyType: string | null;
+      budget: string | null;
+    }) => {
+      const parts = [selections.brand, selections.bodyType, selections.budget].filter(
+        Boolean,
+      ) as string[];
+      const funnelText = parts.join(" ");
+      const previous = lastFunnelTextRef.current;
+
+      setValue((prev) => {
+        const trimmed = prev.trim();
+        let rest = trimmed;
+
+        if (previous && trimmed.startsWith(previous)) {
+          rest = trimmed.slice(previous.length).trim();
+        }
+
+        lastFunnelTextRef.current = funnelText;
+        if (!funnelText) return rest;
+        return rest ? `${funnelText} ${rest}` : funnelText;
+      });
+    },
+    [],
+  );
 
   const trimmed = value.trim();
   const hasTyped = trimmed.length > 0;
@@ -97,80 +94,47 @@ export function HeroInput() {
     <form
       id="eingabe"
       onSubmit={onSubmit}
-      className="mx-auto w-full max-w-2xl scroll-mt-28 sm:scroll-mt-32"
+      className="mx-auto w-full scroll-mt-28 sm:scroll-mt-32"
     >
       <div className="group/input relative">
         <div
           className={cn(
-            "pointer-events-none absolute -inset-[1px] overflow-hidden rounded-2xl opacity-0 transition-opacity duration-300",
-            "group-hover/input:opacity-100 group-focus-within/input:opacity-100",
-          )}
-          aria-hidden
-        >
-          <div className="absolute -inset-[60%] animate-spin-slow bg-[conic-gradient(from_0deg,rgba(31,78,121,0.42),rgba(15,23,42,0.22),rgba(31,78,121,0.42),rgba(100,116,139,0.28))]" />
-        </div>
-
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-2xl border-2 bg-[rgb(253_254_255/0.96)] p-3 shadow-[0_28px_70px_rgba(15,23,42,0.14),0_2px_6px_rgba(15,23,42,0.06)] transition-[box-shadow,transform,border-color] duration-200 glow-hover sm:p-4",
+            "relative overflow-hidden rounded-none border p-4 shadow-premium-float transition-[box-shadow,border-color] duration-300 ease-out sm:p-5",
+            "glass-card",
             focused
-              ? "glow-ring border-[#0a0a0a]/55"
-              : "border-[#0a0a0a]/25",
+              ? "glow-ring border-premium/30"
+              : "border-[#111111]/[0.08] hover:border-[#111111]/[0.12]",
           )}
         >
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/55 via-transparent to-[rgb(241_245_249/0.35)]" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/70 via-transparent to-[#f8f8f7]/40" />
 
-          <div className="relative flex flex-col gap-3">
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                {BRAND_CHIPS.map((c) => (
-                  <motion.button
-                    key={c}
-                    type="button"
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => append(c)}
-                    className="rounded-full border border-[rgba(148,163,184,0.45)] bg-gradient-to-b from-white to-[#eef3f8] px-2.5 py-1 text-[11px] font-semibold text-[#1f2937] shadow-[0_1px_2px_rgba(15,23,42/0.05)] transition hover:border-[rgba(31,78,121,0.32)] hover:from-white hover:to-[#e8eef5] hover:shadow-[0_4px_14px_-4px_rgba(15,23,42/0.1)]"
-                  >
-                    {c}
-                  </motion.button>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                {ATTRIBUTE_CHIPS.map((c) => (
-                  <motion.button
-                    key={c}
-                    type="button"
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => append(c)}
-                    className="rounded-full border border-[rgba(148,163,184,0.45)] bg-gradient-to-b from-white to-[#eef3f8] px-2.5 py-1 text-[11px] font-semibold text-[#1f2937] shadow-[0_1px_2px_rgba(15,23,42/0.05)] transition hover:border-[rgba(31,78,121,0.32)] hover:from-white hover:to-[#e8eef5] hover:shadow-[0_4px_14px_-4px_rgba(15,23,42/0.1)]"
-                  >
-                    {c}
-                  </motion.button>
-                ))}
-              </div>
-            </div>
+          <div className="relative flex flex-col">
+            <SelectionFunnel
+              onSelectionChange={syncFunnelToText}
+              onAllCompleteChange={setFunnelComplete}
+            />
 
-            <div className="flex flex-wrap items-center gap-1.5 pl-0.5">
-              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-                Beliebt
-              </span>
-              {TRENDING.map((t) => (
-                <motion.button
-                  key={t}
-                  type="button"
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => append(t)}
-                  className="rounded-md border border-transparent px-2 py-0.5 text-[11px] font-medium text-[#64748b] underline decoration-slate-300/90 decoration-dotted underline-offset-2 transition hover:border-[rgba(100,116,139,0.25)] hover:bg-[rgb(241_245_249/0.85)] hover:text-[#1f2937] hover:no-underline"
+            <AnimatePresence initial={false}>
+              {funnelComplete ? (
+                <motion.div
+                  key="funnel-hint"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex min-h-[3.25rem] items-center justify-center py-4"
                 >
-                  {t}
-                </motion.button>
-              ))}
-            </div>
+                  <p className="px-0.5 text-center text-[11px] font-semibold leading-snug text-[#111111]/75 sm:text-xs">
+                    Perfekt — du kannst deine Suche jetzt noch genauer beschreiben.
+                  </p>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
 
             <label className="sr-only" htmlFor="vehicle-request">
               Wunschfahrzeug beschreiben
             </label>
-            <div className="relative">
+            <div className={cn("relative", !funnelComplete && "mt-4")}>
               <textarea
                 id="vehicle-request"
                 name="vehicle-request"
@@ -180,11 +144,11 @@ export function HeroInput() {
                 onBlur={() => setFocused(false)}
                 rows={4}
                 className={cn(
-                  "w-full resize-none rounded-md border border-[rgba(100,116,139,0.28)] bg-[rgb(241_245_249/0.82)] px-4 py-3.5 text-[15px] leading-snug text-[#1f2937] outline-none transition",
-                  "placeholder:text-transparent focus:border-[rgba(31,78,121,0.45)] focus:ring-2 focus:ring-[rgba(31,78,121,0.12)]",
+                  "w-full resize-none rounded-none border border-[#eaeaea] bg-white/90 px-4 py-3.5 text-[15px] leading-snug text-[#111111] outline-none transition duration-200 ease-out",
+                  "placeholder:text-transparent focus:border-premium/40 focus:ring-2 focus:ring-premium/12",
                 )}
               />
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-4 py-3 text-[15px] leading-snug text-[#7b8794]">
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-4 py-3 text-[15px] leading-snug text-[#9a9a9a]">
                 <AnimatePresence initial={false}>
                   {!value && !focused ? (
                     <motion.span
@@ -202,7 +166,7 @@ export function HeroInput() {
               </div>
             </div>
 
-            <div className="-mt-1 flex flex-wrap items-center justify-center gap-2.5 pt-1.5">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3 pt-0.5 sm:justify-start">
               <VoiceInputButton
                 onTranscript={(t) => {
                   setValue(t);
@@ -213,32 +177,29 @@ export function HeroInput() {
                 size="lg"
                 disabled={submitting || !ready}
                 className={cn(
-                  "group/btn relative h-10 min-w-[12.5rem] overflow-hidden rounded-md border-0 px-6 font-semibold shadow-cta transition hover:-translate-y-px hover:scale-[1.02] active:translate-y-0 active:scale-[0.98] disabled:pointer-events-none disabled:hover:translate-y-0 disabled:hover:scale-100",
-                  hasTyped
-                    ? "bg-[#0a0a0a] text-white shadow-[0_8px_22px_-8px_rgba(0,0,0,0.35)] hover:bg-[#171717] hover:shadow-[0_10px_28px_-8px_rgba(0,0,0,0.42)] disabled:opacity-100 disabled:saturate-100 disabled:brightness-[0.88] disabled:shadow-[0_4px_14px_-8px_rgba(0,0,0,0.25)]"
-                    : "bg-cta-navy text-tech-foreground shadow-cta hover:bg-cta-navy-hover hover:shadow-cta-hover disabled:opacity-60",
+                  "group/btn relative h-12 min-w-[14rem] overflow-hidden rounded-none border-0 bg-[#262626] px-8 text-sm font-bold text-white shadow-[0_4px_14px_rgba(17,17,17,0.18)] transition duration-250 ease-out hover:bg-[#1a1a1a] active:translate-y-0 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 disabled:hover:bg-[#262626] disabled:hover:translate-y-0",
+                  hasTyped && "hover:-translate-y-0.5",
                 )}
               >
                 <span className="relative z-10 inline-flex items-center gap-2 text-sm">
                   {submitting ? (
-                    <span className="size-4 animate-spin rounded-full border-2 border-white/35 border-t-white" />
+                    <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   ) : null}
                   {submitting ? "Wird gesendet…" : "Termin vereinbaren"}
                   {!submitting ? (
                     <ArrowRight className="size-4 transition group-hover/btn:translate-x-0.5" />
                   ) : null}
                 </span>
-                <span className="pointer-events-none absolute inset-0 bg-white/[0.05] opacity-0 transition group-hover/btn:opacity-100" />
               </Button>
             </div>
           </div>
         </div>
       </div>
-      <p className="mt-3 text-center text-[11px] text-muted-foreground">
+      <p className="mt-4 text-center text-[11px] text-[#9a9a9a] lg:text-left">
         Mit dem Fortfahren stimmst du unseren{" "}
         <Link
           href="/datenschutz"
-          className="font-medium text-foreground/80 underline decoration-border underline-offset-2 hover:text-tech"
+          className="font-medium text-[#6b6b6b] underline decoration-[#eaeaea] underline-offset-2 transition hover:text-[#111111] hover:decoration-premium/50"
         >
           Datenschutzhinweisen
         </Link>{" "}

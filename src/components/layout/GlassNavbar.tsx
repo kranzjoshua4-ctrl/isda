@@ -1,10 +1,12 @@
 "use client";
 
+import { handleMainNavClick } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { Car } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 const links = [
   { href: "/", label: "Start" },
@@ -13,27 +15,28 @@ const links = [
   { href: "/kontakt", label: "Kontakt" },
 ];
 
+function syncHash(setHash: (hash: string) => void) {
+  setHash(typeof window !== "undefined" ? window.location.hash : "");
+}
+
 export function GlassNavbar() {
+  const router = useRouter();
   const [elevated, setElevated] = useState(false);
   const pathname = usePathname();
   const [hash, setHash] = useState("");
 
   useLayoutEffect(() => {
-    setHash(typeof window !== "undefined" ? window.location.hash : "");
+    syncHash(setHash);
   }, []);
 
   useEffect(() => {
-    const sync = () => {
-      setHash(typeof window !== "undefined" ? window.location.hash : "");
-    };
-    sync();
-    const t = window.setTimeout(sync, 0);
-    window.addEventListener("hashchange", sync);
-    window.addEventListener("popstate", sync);
+    syncHash(setHash);
+    const onHashChange = () => syncHash(setHash);
+    window.addEventListener("hashchange", onHashChange);
+    window.addEventListener("popstate", onHashChange);
     return () => {
-      window.clearTimeout(t);
-      window.removeEventListener("hashchange", sync);
-      window.removeEventListener("popstate", sync);
+      window.removeEventListener("hashchange", onHashChange);
+      window.removeEventListener("popstate", onHashChange);
     };
   }, [pathname]);
 
@@ -44,33 +47,46 @@ export function GlassNavbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const onNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (handleMainNavClick(e, href, { pathname, setHash })) {
+      return;
+    }
+
+    const url = new URL(href, "http://localhost");
+    const target = `${url.pathname}${url.search}${url.hash}`;
+    e.preventDefault();
+    router.push(target, { scroll: false });
+  };
+
   return (
     <motion.header
       initial={{ y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 w-full border-b border-white/10 bg-cta-navy text-[#f1f5f9]",
-        "shadow-[0_8px_24px_rgba(15,23,42,0.12)] transition-[box-shadow] duration-300",
-        elevated && "shadow-[0_10px_28px_rgba(15,23,42,0.16)]",
+        "fixed inset-x-0 top-0 z-50 w-full border-b transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300 ease-out",
+        elevated
+          ? "border-[#111111]/[0.07] bg-white/85 shadow-[0_4px_24px_-8px_rgba(17,17,17,0.08)] backdrop-blur-xl"
+          : "border-transparent bg-white/70 backdrop-blur-md",
       )}
     >
-      <div className="relative mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+      <motion.div className="relative mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center px-5 sm:px-6 lg:px-8">
         <Link
           href="/"
-          onClick={(e) => {
-            if (pathname === "/") {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-          }}
-          className="group relative z-10 flex shrink-0 items-baseline gap-0.5 leading-none"
+          scroll={false}
+          onClick={(e) => onNavClick(e, "/")}
+          className="group relative z-10 flex shrink-0 items-center gap-2 leading-none"
           aria-label="ichsuchdeinauto.de — Startseite"
         >
-          <span className="font-display text-sm font-semibold tracking-tight text-[#f8fafc] sm:text-[0.95rem]">
-            ichsuchdeinauto
+          <span className="flex size-8 items-center justify-center rounded-none border border-[#111111]/[0.08] bg-[#f8f8f7] text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] transition duration-200 group-hover:border-premium/30 group-hover:shadow-[0_4px_12px_-4px_rgba(201,162,39,0.2)]">
+            <Car className="size-4" strokeWidth={1.75} />
           </span>
-          <span className="text-xs font-semibold text-tech-accent">.de</span>
+          <span className="flex items-baseline gap-0.5">
+            <span className="font-display text-sm font-semibold tracking-tight text-[#111111] sm:text-[0.95rem]">
+              ichsuchdeinauto
+            </span>
+            <span className="text-xs font-semibold text-premium">.de</span>
+          </span>
         </Link>
 
         <nav
@@ -89,24 +105,13 @@ export function GlassNavbar() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    onClick={(e) => {
-                      if (l.href === "/" && pathname === "/") {
-                        e.preventDefault();
-                        if (window.location.hash) {
-                          history.replaceState(null, "", "/");
-                        }
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }
-                      const sync = () =>
-                        setHash(typeof window !== "undefined" ? window.location.hash : "");
-                      queueMicrotask(sync);
-                      window.setTimeout(sync, 0);
-                    }}
+                    scroll={false}
+                    onClick={(e) => onNavClick(e, l.href)}
                     className={cn(
-                      "border-b-2 border-b-transparent pb-0.5 text-[13px] font-medium tracking-tight transition-colors duration-200",
+                      "relative pb-0.5 text-[13px] font-medium tracking-tight transition-colors duration-200",
                       active
-                        ? "border-b-white text-white"
-                        : "text-[rgb(226_232_240/0.72)] hover:border-b-white/25 hover:text-[#f8fafc]",
+                        ? "text-[#111111] after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:rounded-none after:bg-premium"
+                        : "text-[#6b6b6b] hover:text-[#111111]",
                     )}
                   >
                     {l.label}
@@ -117,7 +122,20 @@ export function GlassNavbar() {
           </ul>
         </nav>
 
-      </div>
+        <Link
+          href="/partner/portal"
+          scroll={false}
+          onClick={(e) => onNavClick(e, "/partner/portal")}
+          className={cn(
+            "relative z-10 ml-auto inline-flex h-9 shrink-0 items-center justify-center rounded-none border px-3.5 text-[12px] font-semibold tracking-tight transition duration-200 sm:h-10 sm:px-4 sm:text-[13px]",
+            pathname === "/partner/portal"
+              ? "border-premium/35 bg-[#111111] text-white shadow-[0_4px_14px_rgba(17,17,17,0.14)] hover:bg-[#1a1a1a]"
+              : "border-[#111111]/10 bg-white/90 text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] hover:border-premium/30 hover:bg-white",
+          )}
+        >
+          Partner Portal
+        </Link>
+      </motion.div>
     </motion.header>
   );
 }

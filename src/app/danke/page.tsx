@@ -65,13 +65,13 @@ export default function DankePage() {
         initial={{ scale: 0.88, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto mb-10 flex size-20 items-center justify-center rounded-2xl border border-[rgba(148,163,184,0.32)] bg-white/90 shadow-[0_18px_50px_rgba(15,23,42,0.08),0_6px_18px_rgba(15,23,42,0.06)]"
+        className="mx-auto mb-10 flex size-20 items-center justify-center rounded-none border border-[rgba(148,163,184,0.32)] bg-white/90 shadow-[0_18px_50px_rgba(15,23,42,0.08),0_6px_18px_rgba(15,23,42,0.06)]"
       >
         <motion.span
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 280, damping: 16, delay: 0.15 }}
-          className="flex size-11 items-center justify-center rounded-xl bg-cta-navy text-white shadow-cta"
+          className="flex size-11 items-center justify-center rounded-none bg-cta-navy text-white shadow-cta"
           aria-hidden
         >
           <Check className="size-6" strokeWidth={2.5} />
@@ -104,7 +104,7 @@ export default function DankePage() {
         <BookingCard dateLabel={dateLabel} slot={booking.slot} />
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-[rgba(148,163,184,0.28)] bg-white/90 p-5 shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)]">
+          <div className="rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-5 shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)]">
             <p className="text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
               Zahlungsmethode
             </p>
@@ -115,7 +115,7 @@ export default function DankePage() {
               </p>
             ) : null}
           </div>
-          <div className="rounded-xl border border-[rgba(148,163,184,0.28)] bg-white/90 p-5 shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)]">
+          <div className="rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-5 shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)]">
             <p className="text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
               Rückruf
             </p>
@@ -137,7 +137,7 @@ export default function DankePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.26, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 overflow-hidden rounded-2xl border border-[rgba(148,163,184,0.28)] bg-[rgba(255,255,255,0.9)] p-6 text-left shadow-[0_24px_70px_rgba(15,23,42,0.1),0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_28px_80px_rgba(15,23,42,0.12),0_12px_36px_rgba(15,23,42,0.08)] sm:p-8"
+            className="relative z-10 overflow-hidden rounded-none border border-[rgba(148,163,184,0.28)] bg-[rgba(255,255,255,0.9)] p-6 text-left shadow-[0_24px_70px_rgba(15,23,42,0.1),0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl transition-shadow duration-300 hover:shadow-[0_28px_80px_rgba(15,23,42,0.12),0_12px_36px_rgba(15,23,42,0.08)] sm:p-8"
           >
             <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-[#64748b]">
               Originaltext
@@ -156,7 +156,7 @@ export default function DankePage() {
         <div className="flex justify-center pt-4">
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-center rounded-sm border border-[rgba(148,163,184,0.35)] bg-white px-6 text-sm font-semibold text-[#0f172a] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#0a0a0a]/40 hover:bg-[#f8fafc]"
+            className="inline-flex h-11 items-center justify-center rounded-none border border-[rgba(148,163,184,0.35)] bg-white px-6 text-sm font-semibold text-[#0f172a] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#0a0a0a]/40 hover:bg-[#f8fafc]"
           >
             Zur Startseite
           </Link>

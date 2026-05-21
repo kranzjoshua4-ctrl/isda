@@ -79,7 +79,7 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
         disabled
         title="Spracheingabe wird in diesem Browser nicht unterstützt"
         className={cn(
-          "inline-flex size-10 items-center justify-center rounded-md border border-dashed border-border text-muted-foreground",
+          "inline-flex size-11 items-center justify-center rounded-none border border-dashed border-[#eaeaea] text-[#9a9a9a]",
           className,
         )}
       >
@@ -94,8 +94,8 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
       onClick={toggle}
       aria-pressed={listening}
       className={cn(
-        "group relative inline-flex size-10 items-center justify-center overflow-hidden rounded-md border border-zinc-800 bg-black text-zinc-100 shadow-[0_1px_0_rgb(255_255_255/0.06)_inset,0_8px_20px_-6px_rgb(0_0_0/0.35)] transition hover:scale-[1.04] hover:border-zinc-600 hover:bg-zinc-950 active:scale-[0.97]",
-        listening && "border-zinc-500 ring-2 ring-zinc-500/30",
+        "group relative inline-flex size-11 items-center justify-center overflow-hidden rounded-none border border-[#eaeaea] bg-white text-[#111111] shadow-[0_1px_3px_rgba(17,17,17,0.06)] transition duration-250 ease-out hover:-translate-y-0.5 hover:border-premium/35 hover:shadow-[0_8px_20px_-10px_rgba(17,17,17,0.12)] active:scale-[0.98]",
+        listening && "border-premium/50 ring-2 ring-premium/20",
         className,
       )}
     >

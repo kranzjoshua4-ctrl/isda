@@ -34,7 +34,7 @@ const SUMMARY_FIELDS: { key: keyof ExtractedAttributes; label: string }[] = [
 const SLOTS = ["09:00", "10:30", "12:00", "14:30", "16:00", "18:30"];
 
 const cardShell =
-  "rounded-3xl border border-[rgba(148,163,184,0.28)] bg-[rgba(255,255,255,0.86)] p-6 shadow-[0_24px_70px_rgba(15,23,42,0.1),0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl md:p-8";
+  "rounded-none border border-[rgba(148,163,184,0.28)] bg-[rgba(255,255,255,0.86)] p-6 shadow-[0_24px_70px_rgba(15,23,42,0.1),0_10px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl md:p-8";
 
 export default function TerminPage() {
   const router = useRouter();
@@ -213,7 +213,7 @@ export default function TerminPage() {
         className="mx-auto mt-6 max-w-3xl"
         aria-label="Zusammenfassung deiner Anfrage"
       >
-        <div className="rounded-2xl border border-[rgba(148,163,184,0.28)] bg-[rgba(255,255,255,0.86)] p-4 shadow-[0_18px_50px_rgba(15,23,42,0.08),0_6px_18px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-5">
+        <div className="rounded-none border border-[rgba(148,163,184,0.28)] bg-[rgba(255,255,255,0.86)] p-4 shadow-[0_18px_50px_rgba(15,23,42,0.08),0_6px_18px_rgba(15,23,42,0.06)] backdrop-blur-xl sm:p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#64748b]">
@@ -240,44 +240,48 @@ export default function TerminPage() {
                     }}
                     rows={3}
                     autoFocus
-                    className="w-full resize-none rounded-md border border-[rgba(100,116,139,0.32)] bg-white px-3 py-2 text-[13px] leading-relaxed text-[#0f172a] outline-none transition focus:border-[rgba(31,78,121,0.45)] focus:ring-2 focus:ring-[rgba(31,78,121,0.12)] sm:text-sm"
+                    className="w-full resize-none rounded-none border border-[rgba(100,116,139,0.32)] bg-white px-3 py-2 text-[13px] leading-relaxed text-[#0f172a] outline-none transition focus:border-[rgba(31,78,121,0.45)] focus:ring-2 focus:ring-[rgba(31,78,121,0.12)] sm:text-sm"
                   />
                   <p className="mt-1 text-[10px] leading-snug text-[#64748b]">
                     Mindestens {MIN_VEHICLE_REQUEST_LENGTH} Zeichen. Speichern aktualisiert die Merkmale
                     automatisch.
                   </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={saveEditRequest}
+                      disabled={requestDraft.trim().length < MIN_VEHICLE_REQUEST_LENGTH}
+                      className="inline-flex items-center gap-1 rounded-none bg-[#0a0a0a] px-3 py-1.5 text-[11px] font-semibold text-white shadow-[0_4px_14px_-6px_rgba(0,0,0,0.45)] transition hover:bg-[#171717] disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <Check className="size-3" />
+                      Speichern
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelEditRequest}
+                      className="inline-flex items-center gap-1 rounded-none border border-[rgba(148,163,184,0.35)] bg-white px-3 py-1.5 text-[11px] font-semibold text-[#475569] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#0a0a0a]/40 hover:bg-[#f8fafc] hover:text-[#0f172a]"
+                    >
+                      <X className="size-3" />
+                      Abbrechen
+                    </button>
+                  </div>
                 </div>
               ) : (
-                <p className="mt-1.5 text-pretty text-[13px] leading-relaxed text-[#0f172a] sm:text-sm">
+                <button
+                  type="button"
+                  onClick={startEditRequest}
+                  className="mt-1.5 w-full cursor-text rounded-none text-left text-pretty text-[13px] leading-relaxed text-[#0f172a] transition hover:bg-[#f8fafc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(31,78,121,0.25)] sm:text-sm"
+                  aria-label="Wagenbeschreibung bearbeiten"
+                >
                   {vehicleRequest}
-                </p>
+                </button>
               )}
             </div>
-            {editingRequest ? (
-              <div className="flex shrink-0 flex-col gap-1.5 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={saveEditRequest}
-                  disabled={requestDraft.trim().length < MIN_VEHICLE_REQUEST_LENGTH}
-                  className="inline-flex items-center gap-1 rounded-full bg-[#0a0a0a] px-2.5 py-1 text-[11px] font-semibold text-white shadow-[0_4px_14px_-6px_rgba(0,0,0,0.45)] transition hover:bg-[#171717] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <Check className="size-3" />
-                  Speichern
-                </button>
-                <button
-                  type="button"
-                  onClick={cancelEditRequest}
-                  className="inline-flex items-center gap-1 rounded-full border border-[rgba(148,163,184,0.35)] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#475569] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#0a0a0a]/40 hover:bg-[#f8fafc] hover:text-[#0f172a]"
-                >
-                  <X className="size-3" />
-                  Abbrechen
-                </button>
-              </div>
-            ) : (
+            {!editingRequest && (
               <button
                 type="button"
                 onClick={startEditRequest}
-                className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[rgba(148,163,184,0.35)] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#0f172a] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#0a0a0a]/40 hover:bg-[#f8fafc]"
+                className="inline-flex shrink-0 items-center gap-1 rounded-none border border-[rgba(148,163,184,0.35)] bg-white px-2.5 py-1 text-[11px] font-semibold text-[#0f172a] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#0a0a0a]/40 hover:bg-[#f8fafc]"
               >
                 <Pencil className="size-3" />
                 Bearbeiten
@@ -290,7 +294,7 @@ export default function TerminPage() {
               {summaryChips.map((c) => (
                 <span
                   key={c.label}
-                  className="inline-flex items-center gap-1 rounded-full border border-[rgba(148,163,184,0.32)] bg-[#f8fafc] px-2.5 py-0.5 text-[11px] leading-snug text-[#0f172a]"
+                  className="inline-flex items-center gap-1 rounded-none border border-[rgba(148,163,184,0.32)] bg-[#f8fafc] px-2.5 py-0.5 text-[11px] leading-snug text-[#0f172a]"
                 >
                   <span className="font-semibold text-[#475569]">{c.label}:</span>
                   <span className="font-semibold">{c.value}</span>
@@ -332,7 +336,7 @@ export default function TerminPage() {
             </div>
 
             {!selectedDate ? (
-              <p className="mb-4 rounded-xl border border-[rgba(148,163,184,0.35)] bg-[#f8fafc] px-3 py-2.5 text-[13px] leading-snug text-[#475569]">
+              <p className="mb-4 rounded-none border border-[rgba(148,163,184,0.35)] bg-[#f8fafc] px-3 py-2.5 text-[13px] leading-snug text-[#475569]">
                 Bitte zuerst einen Tag auswählen.
               </p>
             ) : null}
@@ -349,7 +353,7 @@ export default function TerminPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.02 * i, duration: 0.2 }}
                     onClick={() => setPickedSlot(t)}
-                    className={`min-h-11 min-w-[4.5rem] rounded-xl border px-4 py-2.5 text-sm font-semibold tracking-tight transition-[transform,box-shadow,border-color,background-color,color] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
+                    className={`min-h-11 min-w-[4.5rem] rounded-none border px-4 py-2.5 text-sm font-semibold tracking-tight transition-[transform,box-shadow,border-color,background-color,color] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-white ${
                       active
                         ? "border-transparent bg-cta-navy text-white shadow-[0_8px_22px_-8px_rgba(0,0,0,0.42)]"
                         : "border-[rgba(148,163,184,0.35)] bg-white text-[#0f172a] hover:scale-[1.02] hover:border-[#0a0a0a]/35 hover:bg-[#f8fafc] hover:shadow-[0_6px_18px_-10px_rgba(15,23,42,0.1)] active:scale-[0.99]"
@@ -441,7 +445,7 @@ export default function TerminPage() {
                 <BookingCard dateLabel={dateLabel} slot={slot} compact />
               </div>
             ) : selectedDate && !slot ? (
-              <div className="mt-2 rounded-lg border border-[rgba(148,163,184,0.35)] bg-[#fafbfc] px-2.5 py-3">
+              <div className="mt-2 rounded-none border border-[rgba(148,163,184,0.35)] bg-[#fafbfc] px-2.5 py-3">
                 <p className="text-[0.5rem] font-semibold uppercase tracking-[0.16em] text-[#64748b]">
                   Gewählter Tag
                 </p>
@@ -461,7 +465,7 @@ export default function TerminPage() {
                 </div>
               </div>
             ) : (
-              <div className="mt-2 rounded-lg border border-dashed border-[rgba(148,163,184,0.45)] bg-[#fafbfc] px-2.5 py-4 text-center">
+              <div className="mt-2 rounded-none border border-dashed border-[rgba(148,163,184,0.45)] bg-[#fafbfc] px-2.5 py-4 text-center">
                 <p className="text-[11px] leading-relaxed text-[#475569]">
                   Wähle links Tag und Uhrzeit aus.
                 </p>
@@ -494,7 +498,7 @@ export default function TerminPage() {
             {checkoutError ? (
               <p
                 role="alert"
-                className="mt-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-1.5 text-[11px] leading-relaxed text-red-900"
+                className="mt-2 rounded-none border border-red-200 bg-red-50 px-2.5 py-1.5 text-[11px] leading-relaxed text-red-900"
               >
                 {checkoutError}
               </p>
@@ -505,7 +509,7 @@ export default function TerminPage() {
                 type="button"
                 disabled={ctaDisabled}
                 onClick={onCheckout}
-                className="group relative flex h-10 w-full items-center justify-center overflow-hidden rounded-lg border-0 bg-cta-navy px-3 text-[12px] font-semibold text-tech-foreground shadow-cta transition duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.01] hover:bg-cta-navy-hover hover:shadow-cta-hover active:translate-y-0 active:scale-[0.99] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-[0.42] disabled:saturate-[0.65] disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:scale-100"
+                className="group relative flex h-10 w-full items-center justify-center overflow-hidden rounded-none border-0 bg-cta-navy px-3 text-[12px] font-semibold text-white shadow-cta transition duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.01] hover:bg-cta-navy-hover hover:shadow-cta-hover active:translate-y-0 active:scale-[0.99] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-[0.42] disabled:saturate-[0.65] disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:scale-100"
               >
                 <span className="pointer-events-none absolute inset-0 translate-x-[-100%] bg-gradient-to-r from-transparent via-white/12 to-transparent transition duration-700 group-hover:translate-x-[100%] group-disabled:hidden" />
                 <span className="relative z-10 inline-flex items-center justify-center gap-1.5 text-center">

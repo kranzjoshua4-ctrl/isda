@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 export default function KontaktPage() {
@@ -10,7 +12,7 @@ export default function KontaktPage() {
           Fahrzeuganfragen erfolgen ausschließlich über die Suchanfrage auf der Startseite.
         </span>
       </p>
-      <div className="mt-10 rounded-xl border border-border bg-card p-6 text-sm leading-relaxed text-muted-foreground shadow-premium-sm">
+      <div className="mt-10 rounded-none border border-border bg-card p-6 text-sm leading-relaxed text-muted-foreground shadow-premium-sm">
         <p>
           E-Mail:{" "}
           <a className="text-foreground underline decoration-foreground/20 underline-offset-4" href="mailto:kontakt@ichsuchdeinauto.de">
