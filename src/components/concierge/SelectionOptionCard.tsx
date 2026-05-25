@@ -19,6 +19,8 @@ export function SelectionOptionCard({
   selected,
   onSelect,
 }: SelectionOptionCardProps) {
+  const isBrandLogo = Boolean(option.logoSrc) && !isVehicleBadge(option.logoSize);
+
   return (
     <motion.button
       type="button"
@@ -27,18 +29,18 @@ export function SelectionOptionCard({
       aria-pressed={selected}
       aria-label={option.label}
       className={cn(
-        "group/card flex min-h-[5rem] w-full flex-col items-center justify-center rounded-none border px-2.5 text-center transition-[background-color,border-color,box-shadow] duration-250 ease-out",
-        option.logoSrc
-          ? option.logoSize === "badge"
-            ? "gap-0.5 py-2"
-            : "gap-0.5 py-2"
-          : "gap-0.5 py-2.5",
+        "group/card flex w-full flex-col items-center justify-center text-center transition-[background-color,border-color,box-shadow,transform] duration-250 ease-out",
+        isBrandLogo
+          ? "min-h-[3.75rem] gap-1 rounded-sm border bg-white px-1.5 py-2.5 shadow-[0_2px_8px_rgba(17,17,17,0.04)] lg:min-h-[3.5rem] lg:px-2 lg:py-2"
+          : "min-h-[5rem] gap-0.5 rounded-sm border px-2.5 py-2",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium/35 focus-visible:ring-offset-2",
         selected
           ? option.logoSrc
-            ? "border-premium bg-white text-[#111111] shadow-[0_10px_28px_-10px_rgba(201,162,39,0.28)] ring-2 ring-premium/25"
-            : "border-[#111111] bg-[#111111] text-white shadow-[0_10px_28px_-10px_rgba(17,17,17,0.45)]"
-          : "border-[#eaeaea] bg-[#f8f8f7] text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] hover:border-premium/35 hover:bg-white hover:shadow-[0_10px_24px_-12px_rgba(17,17,17,0.12)]",
+            ? "border-premium/40 bg-white ring-2 ring-premium/20 shadow-[0_8px_24px_-8px_rgba(232,90,40,0.22)]"
+            : "border-premium bg-cta-navy text-white shadow-cta"
+          : isBrandLogo
+            ? "border-[#eeeeee] hover:border-premium/30 hover:shadow-[0_6px_16px_-8px_rgba(17,17,17,0.1)]"
+            : "border-border bg-[#f8f8f7] text-[#111111] hover:border-premium/30 hover:bg-white",
       )}
     >
       {option.logoSrc ? (
@@ -49,25 +51,22 @@ export function SelectionOptionCard({
               ? option.logoSize === "badge-lg"
                 ? "h-[5.5rem] max-w-[10.5rem]"
                 : "h-[4.75rem] max-w-[9rem]"
-              : "h-11 max-w-[5.25rem]",
+              : "mx-auto flex h-9 w-full max-w-[5rem] items-center justify-center",
           )}
           aria-hidden
         >
-          {/* natives img: Logos werden oft ausgetauscht — kein Next-Image-Cache */}
           <img
             src={getLogoUrl(option.logoSrc, option.logoRev)}
             alt=""
             width={400}
             height={240}
             className={cn(
-              "block object-contain object-center [image-rendering:-webkit-optimize-contrast] transition-transform duration-250 ease-out will-change-transform backface-hidden",
+              "mx-auto block object-contain object-center transition-transform duration-250 ease-out",
               isVehicleBadge(option.logoSize)
                 ? option.logoImgClassName
-                  ? "h-auto w-auto"
+                  ? "h-auto w-auto max-h-[3rem] max-w-[6rem]"
                   : "h-full w-full"
-                : option.logoSize === "sm"
-                  ? "max-h-9 max-w-[4.25rem] w-auto"
-                  : "max-h-11 max-w-[5.25rem] w-auto",
+                : "h-9 w-auto max-w-[4.75rem]",
               !selected && "group-hover/card:scale-105",
               option.logoImgClassName,
             )}
@@ -78,9 +77,8 @@ export function SelectionOptionCard({
       ) : (
         <span
           className={cn(
-            "text-[1.5rem] leading-[0.85] transition-transform duration-250 ease-out will-change-transform backface-hidden",
+            "text-[1.5rem] leading-[0.85] transition-transform duration-250 ease-out",
             !selected && "group-hover/card:scale-110",
-            selected && "drop-shadow-sm",
           )}
           aria-hidden
         >
@@ -91,6 +89,7 @@ export function SelectionOptionCard({
         className={cn(
           "shrink-0 text-[11px] font-semibold leading-tight tracking-tight",
           selected && !option.logoSrc ? "text-white" : "text-[#111111]",
+          isBrandLogo && "sr-only",
         )}
       >
         {option.label}

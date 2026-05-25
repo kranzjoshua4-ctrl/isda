@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Montserrat } from "next/font/google";
+import { Geist_Mono, Inter } from "next/font/google";
 
 import { SiteShell } from "@/components/layout/SiteShell";
 
 import "./globals.css";
 
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-inter",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="de"
-      className={`${montserrat.variable} ${geistMono.variable} h-full`}
+      className={`${inter.variable} ${geistMono.variable} h-full`}
     >
       <body className="min-h-full bg-background text-foreground">
         <SiteShell>{children}</SiteShell>

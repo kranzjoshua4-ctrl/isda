@@ -55,7 +55,7 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
       animate="visible"
       variants={containerVariants}
       className={cn(
-        "mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-1.5 text-[11px] font-semibold sm:mt-7 sm:text-xs",
+        "mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-3.5 text-[11px] font-semibold sm:mt-7 sm:text-xs",
         className,
       )}
     >
@@ -68,28 +68,19 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
         const node = isActive ? (
           <motion.span
             aria-current="step"
-            initial={{ boxShadow: "0 4px 14px -6px rgba(0,0,0,0)" }}
-            animate={{
-              boxShadow: [
-                "0 4px 14px -6px rgba(0,0,0,0)",
-                "0 10px 28px -8px rgba(0,0,0,0.55)",
-                "0 4px 14px -6px rgba(0,0,0,0.45)",
-              ],
-            }}
-            transition={{ duration: 1.1, delay: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
-            className="rounded-none bg-cta-premium px-3.5 py-1.5 text-[#111111] shadow-cta-gold"
+            className="rounded-md bg-premium px-3.5 py-1.5 text-white shadow-[0_8px_24px_rgb(232_90_40/0.28)]"
           >
             {label}
           </motion.span>
         ) : isDone ? (
           <Link
             href={s.href}
-            className="rounded-none border border-[#eaeaea] bg-white px-3.5 py-1.5 text-[#6b6b6b] transition duration-200 hover:border-premium/30 hover:text-[#111111]"
+            className="rounded-md border border-border bg-white px-3.5 py-1.5 text-[#6b6b6b] transition hover:border-premium/30 hover:text-[#111111]"
           >
             {label}
           </Link>
         ) : (
-          <span className="rounded-none border border-[#eaeaea] bg-[#f8f8f7] px-3.5 py-1.5 text-[#9a9a9a]">
+          <span className="rounded-md border border-border bg-white px-3.5 py-1.5 text-[#9a9a9a]">
             {label}
           </span>
         );
@@ -98,12 +89,12 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
           <motion.span
             key={s.label}
             variants={segmentVariants}
-            className="flex items-center gap-1.5 will-change-transform"
+            className="flex items-center gap-1.5"
           >
             {node}
             {i < STEPS.length - 1 ? (
               <motion.span variants={chevronVariants} className="inline-flex">
-                <ChevronRight className="size-3.5 shrink-0 text-[#c9a227]/70" aria-hidden />
+                <ChevronRight className="size-3.5 shrink-0 text-premium/70" aria-hidden />
               </motion.span>
             ) : null}
           </motion.span>

@@ -16,7 +16,7 @@ export function AmbientCursorGlow() {
     return () => window.removeEventListener("pointermove", onMove);
   }, [x, y]);
 
-  const background = useMotionTemplate`radial-gradient(380px circle at ${x}px ${y}px, rgba(31, 78, 121, 0.055), transparent 65%)`;
+  const background = useMotionTemplate`radial-gradient(380px circle at ${x}px ${y}px, rgba(232, 90, 40, 0.06), transparent 65%)`;
 
   return (
     <motion.div

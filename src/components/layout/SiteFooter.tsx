@@ -9,13 +9,13 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 mt-24 border-t border-[#111111]/[0.06] bg-[#f8f8f7]">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-6 py-14 sm:flex-row sm:items-end sm:justify-between lg:px-8">
+    <footer className="relative z-10 mt-16 border-t border-border bg-transparent pt-8">
+      <div className="page-container flex flex-col gap-8 py-14 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-display text-base font-semibold tracking-tight text-[#111111]">
+          <p className="font-display text-base font-semibold tracking-tight text-foreground">
             ichsuchdeinauto<span className="text-premium">.de</span>
           </p>
-          <p className="mt-2 max-w-sm text-sm leading-relaxed text-[#6b6b6b]">
+          <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
             Moderne Gebrauchtwagen-Suche mit persönlichem Rückruf — digital organisiert.
           </p>
         </div>
@@ -24,7 +24,7 @@ export function SiteFooter() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-[#6b6b6b] transition duration-200 hover:text-[#111111]"
+              className="text-muted-foreground transition duration-200 hover:text-foreground"
             >
               {l.label}
             </Link>

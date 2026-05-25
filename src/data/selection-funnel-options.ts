@@ -195,6 +195,48 @@ export const budgets: FunnelOption[] = [
   },
 ];
 
+export const usagePurposes: FunnelOption[] = [
+  { label: "Alltag", icon: "🏠", description: "Zuverlässig" },
+  { label: "Familie", icon: "👨‍👩‍👧", description: "Platz & Sicherheit" },
+  { label: "Langstrecke", icon: "🛣️", description: "Komfort" },
+  { label: "Stadtverkehr", icon: "🏙️", description: "Wendig & kompakt" },
+  { label: "Erstwagen", icon: "🔑", description: "Einfach & sicher" },
+  { label: "Pendeln", icon: "💼", description: "Effizient" },
+  { label: "Sportlich fahren", icon: "🏁", description: "Dynamik" },
+  { label: "Reisen / Camping", icon: "⛺", description: "Viel Platz" },
+  { label: "Handwerk / Transport", icon: "🔧", description: "Robust" },
+  { label: "Luxus / Business", icon: "✨", description: "Premium" },
+];
+
+export const priorities: FunnelOption[] = [
+  { label: "Zuverlässigkeit", icon: "🛡️", description: "Wenig Sorgen" },
+  { label: "Niedriger Verbrauch", icon: "⛽", description: "Sparsam" },
+  { label: "Viel Platz", icon: "📦", description: "Geräumig" },
+  { label: "Günstiger Unterhalt", icon: "🔧", description: "Fair kalkuliert" },
+  { label: "Komfort", icon: "🛋️", description: "Angenehm" },
+  { label: "Leistung", icon: "⚡", description: "Kraftvoll" },
+  { label: "Modernes Design", icon: "✨", description: "Aktuell" },
+  { label: "Sicherheit", icon: "🔒", description: "Geschützt" },
+  { label: "Hohe Sitzposition", icon: "⬆️", description: "Gute Sicht" },
+  { label: "Automatik", icon: "🅰️", description: "Komfortabel" },
+  { label: "Wertstabilität", icon: "📈", description: "Guter Wiederverkauf" },
+];
+
+export const transmissions: FunnelOption[] = [
+  { label: "Automatik", icon: "🅰️", description: "Komfort" },
+  { label: "Schaltgetriebe", icon: "⚙️", description: "Klassisch" },
+  { label: "Egal", icon: "🤝", description: "Offen" },
+];
+
+export const fuelTypes: FunnelOption[] = [
+  { label: "Benzin", icon: "⛽", description: "Klassisch" },
+  { label: "Diesel", icon: "🛢️", description: "Reichweite" },
+  { label: "Hybrid", icon: "🔋", description: "Effizient" },
+  { label: "Elektro", icon: "⚡", description: "Emissionsfrei" },
+  { label: "Plug-in Hybrid", icon: "🔌", description: "Flexibel" },
+  { label: "Egal", icon: "🤝", description: "Offen" },
+];
+
 export function findOptionIcon(
   options: FunnelOption[],
   label: string | null,

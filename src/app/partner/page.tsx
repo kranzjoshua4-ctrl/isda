@@ -122,7 +122,7 @@ function PremiumFeatureCard({
         className="relative mb-6 flex h-12 w-12 items-center justify-center rounded-none border border-[#111111]/[0.06] bg-[#f8f8f7] text-[#111111] shadow-[inset_0_1px_0_rgb(255_255_255/0.95)] transition duration-300 group-hover:border-premium/25 group-hover:text-premium"
         aria-hidden
       >
-        <div className="absolute -inset-px rounded-none bg-[radial-gradient(circle_at_50%_0%,rgb(201_162_39/0.14),transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute -inset-px rounded-none bg-[radial-gradient(circle_at_50%_0%,rgb(16_138_95/0.14),transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <Icon className="relative size-5" strokeWidth={1.35} />
       </div>
       <h2 className="font-display text-lg font-bold leading-snug tracking-tight text-[#111111] sm:text-[1.125rem]">
@@ -158,7 +158,7 @@ export default function PartnerPage() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-[20%] top-[6%] h-[420px] w-[min(70vw,520px)] rounded-full bg-[radial-gradient(circle,rgb(201_162_39/0.07),transparent_68%)] blur-3xl"
+        className="pointer-events-none absolute -right-[20%] top-[6%] h-[420px] w-[min(70vw,520px)] rounded-full bg-[radial-gradient(circle,rgb(16_138_95/0.07),transparent_68%)] blur-3xl"
       />
       <div
         aria-hidden
@@ -362,7 +362,7 @@ export default function PartnerPage() {
             <div className="relative overflow-hidden rounded-none border border-[#111111]/[0.06] bg-white/92 p-6 shadow-tech backdrop-blur-sm sm:p-9 lg:p-10">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(201_162_39/0.08),transparent_70%)]"
+                className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(16_138_95/0.08),transparent_70%)]"
               />
 
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-premium">

@@ -8,7 +8,7 @@ export default function PartnerPortalPage() {
     <div className="relative mx-auto flex min-h-[calc(100dvh-4.25rem)] max-w-lg flex-col justify-center px-5 py-16 sm:px-6 lg:px-8">
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-[30%] top-[10%] h-[320px] w-[min(70vw,400px)] rounded-full bg-[radial-gradient(circle,rgb(201_162_39/0.08),transparent_68%)] blur-3xl"
+        className="pointer-events-none absolute -right-[30%] top-[10%] h-[320px] w-[min(70vw,400px)] rounded-full bg-[radial-gradient(circle,rgb(16_138_95/0.08),transparent_68%)] blur-3xl"
       />
 
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-premium">

@@ -11,7 +11,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <AmbientCursorGlow />
       <NavScrollRestoration />
       <GlassNavbar />
-      <div className="relative z-10 flex min-h-screen flex-col pt-[4.25rem]">
+      <div className="relative z-10 flex min-h-screen flex-col pt-[4.25rem] sm:pt-[4.625rem]">
         <main className="flex-1">{children}</main>
         <SiteFooter />
       </div>

@@ -2,7 +2,7 @@
 
 import { handleMainNavClick } from "@/lib/scroll-to-section";
 import { cn } from "@/lib/utils";
-import { Car } from "lucide-react";
+import { Car, UserRound } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,9 +21,9 @@ function syncHash(setHash: (hash: string) => void) {
 
 export function GlassNavbar() {
   const router = useRouter();
-  const [elevated, setElevated] = useState(false);
   const pathname = usePathname();
   const [hash, setHash] = useState("");
+  const [scrolled, setScrolled] = useState(false);
 
   useLayoutEffect(() => {
     syncHash(setHash);
@@ -41,17 +41,18 @@ export function GlassNavbar() {
   }, [pathname]);
 
   useEffect(() => {
-    const onScroll = () => setElevated(window.scrollY > 8);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   const onNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (handleMainNavClick(e, href, { pathname, setHash })) {
       return;
     }
-
     const url = new URL(href, "http://localhost");
     const target = `${url.pathname}${url.search}${url.hash}`;
     e.preventDefault();
@@ -63,37 +64,36 @@ export function GlassNavbar() {
       initial={{ y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 w-full border-b transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300 ease-out",
-        elevated
-          ? "border-[#111111]/[0.07] bg-white/85 shadow-[0_4px_24px_-8px_rgba(17,17,17,0.08)] backdrop-blur-xl"
-          : "border-transparent bg-white/70 backdrop-blur-md",
-      )}
+      className="fixed inset-x-0 top-0 z-50"
     >
-      <motion.div className="relative mx-auto flex min-h-[4.25rem] w-full max-w-7xl items-center px-5 sm:px-6 lg:px-8">
+      <motion.div
+        aria-hidden
+        className="nav-bar-scroll-bg pointer-events-none absolute inset-0"
+        initial={false}
+        animate={{
+          opacity: scrolled ? 1 : 0,
+          y: scrolled ? 0 : -6,
+        }}
+        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+      />
+      <div className="page-container relative z-10 flex min-h-[3.75rem] items-center py-3 sm:min-h-[4rem]">
         <Link
           href="/"
           scroll={false}
           onClick={(e) => onNavClick(e, "/")}
-          className="group relative z-10 flex shrink-0 items-center gap-2 leading-none"
+          className="group flex shrink-0 items-center gap-2 leading-none"
           aria-label="ichsuchdeinauto.de — Startseite"
         >
-          <span className="flex size-8 items-center justify-center rounded-none border border-[#111111]/[0.08] bg-[#f8f8f7] text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] transition duration-200 group-hover:border-premium/30 group-hover:shadow-[0_4px_12px_-4px_rgba(201,162,39,0.2)]">
+          <span className="flex size-8 items-center justify-center rounded-md border border-border bg-[#fafafa] text-[#111111] transition group-hover:border-premium/30">
             <Car className="size-4" strokeWidth={1.75} />
           </span>
-          <span className="flex items-baseline gap-0.5">
-            <span className="font-display text-sm font-semibold tracking-tight text-[#111111] sm:text-[0.95rem]">
-              ichsuchdeinauto
-            </span>
-            <span className="text-xs font-semibold text-premium">.de</span>
+          <span className="font-display text-sm font-semibold tracking-tight text-[#111111] sm:text-[0.95rem]">
+            ichsuchdeinauto<span className="text-premium">.de</span>
           </span>
         </Link>
 
-        <nav
-          aria-label="Hauptnavigation"
-          className="absolute left-1/2 top-1/2 hidden min-w-0 -translate-x-1/2 -translate-y-1/2 md:block"
-        >
-          <ul className="flex items-stretch gap-8 lg:gap-10">
+        <nav aria-label="Hauptnavigation" className="absolute left-1/2 hidden -translate-x-1/2 md:block">
+          <ul className="flex items-center gap-6 lg:gap-8">
             {links.map((l) => {
               const active =
                 l.href === "/"
@@ -108,13 +108,14 @@ export function GlassNavbar() {
                     scroll={false}
                     onClick={(e) => onNavClick(e, l.href)}
                     className={cn(
-                      "relative pb-0.5 text-[13px] font-medium tracking-tight transition-colors duration-200",
-                      active
-                        ? "text-[#111111] after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:rounded-none after:bg-premium"
-                        : "text-[#6b6b6b] hover:text-[#111111]",
+                      "relative pb-1 text-[13px] font-medium tracking-tight transition-colors",
+                      active ? "text-[#111111]" : "text-[#6b6b6b] hover:text-[#111111]",
                     )}
                   >
                     {l.label}
+                    {active ? (
+                      <span className="absolute inset-x-0 -bottom-0.5 h-0.5 rounded-full bg-premium" />
+                    ) : null}
                   </Link>
                 </li>
               );
@@ -127,15 +128,14 @@ export function GlassNavbar() {
           scroll={false}
           onClick={(e) => onNavClick(e, "/partner/portal")}
           className={cn(
-            "relative z-10 ml-auto inline-flex h-9 shrink-0 items-center justify-center rounded-none border px-3.5 text-[12px] font-semibold tracking-tight transition duration-200 sm:h-10 sm:px-4 sm:text-[13px]",
-            pathname === "/partner/portal"
-              ? "border-premium/35 bg-[#111111] text-white shadow-[0_4px_14px_rgba(17,17,17,0.14)] hover:bg-[#1a1a1a]"
-              : "border-[#111111]/10 bg-white/90 text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] hover:border-premium/30 hover:bg-white",
+            "ml-auto inline-flex h-9 items-center gap-2 rounded-md border-0 bg-cta-navy px-3 text-[12px] font-semibold text-white shadow-cta transition duration-200 hover:bg-cta-navy-hover sm:h-10 sm:px-3.5 sm:text-[13px]",
+            pathname === "/partner/portal" && "ring-2 ring-white/30",
           )}
         >
+          <UserRound className="size-3.5 text-white/90" strokeWidth={1.75} />
           Partner Portal
         </Link>
-      </motion.div>
+      </div>
     </motion.header>
   );
 }

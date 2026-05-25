@@ -5,20 +5,34 @@ import {
   bodyTypes,
   brands,
   budgets,
+  fuelTypes,
   findOptionIcon,
   findOptionLogo,
+  priorities,
+  transmissions,
+  usagePurposes,
   type FunnelOption,
 } from "@/data/selection-funnel-options";
+import { isFunnelCoreComplete } from "@/lib/build-funnel-search-text";
 import { cn } from "@/lib/utils";
+import {
+  EMPTY_FUNNEL_SELECTIONS,
+  type FunnelSelections,
+} from "@/types/funnel";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
-type StepId = 1 | 2 | 3;
+type StepId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+type StepMode = "single" | "multi";
+
+const ALL_STEPS: StepId[] = [1, 2, 3, 4, 5, 6, 7];
+
+/** 2×5 Reihen in der Desktop-Vorschau */
+const BRAND_PREVIEW_COUNT = 10;
 
 const EASE_PREMIUM = [0.22, 1, 0.36, 1] as const;
 
-/** Dezentes Stagger beim ersten Öffnen der Marken-Auswahl (Startseite). */
 const brandGridVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -28,12 +42,10 @@ const brandGridVariants = {
 };
 
 const brandCardVariants = {
-  hidden: { opacity: 0, y: 12, scale: 0.96 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.42, ease: EASE_PREMIUM },
+    transition: { duration: 0.28, ease: EASE_PREMIUM },
   },
 };
 
@@ -42,29 +54,109 @@ const STEPS: {
   title: string;
   label: string;
   options: FunnelOption[];
+  mode: StepMode;
 }[] = [
-  { id: 1, title: "Marke auswählen", label: "Marke", options: brands },
-  { id: 2, title: "Fahrzeugart auswählen", label: "Fahrzeugart", options: bodyTypes },
-  { id: 3, title: "Budget festlegen", label: "Budget", options: budgets },
+  { id: 1, title: "Marke auswählen", label: "Marke", options: brands, mode: "single" },
+  { id: 2, title: "Fahrzeugart auswählen", label: "Fahrzeugart", options: bodyTypes, mode: "single" },
+  { id: 3, title: "Budget festlegen", label: "Budget", options: budgets, mode: "single" },
+  {
+    id: 4,
+    title: "Wofür brauchst du das Auto?",
+    label: "Nutzung",
+    options: usagePurposes,
+    mode: "multi",
+  },
+  {
+    id: 5,
+    title: "Prioritäten wählen",
+    label: "Wichtig",
+    options: priorities,
+    mode: "multi",
+  },
+  { id: 6, title: "Getriebe auswählen", label: "Getriebe", options: transmissions, mode: "single" },
+  {
+    id: 7,
+    title: "Kraftstoff / Antrieb auswählen",
+    label: "Antrieb",
+    options: fuelTypes,
+    mode: "single",
+  },
 ];
 
-function selectionForStep(
+function isStepComplete(step: StepId, selections: FunnelSelections): boolean {
+  switch (step) {
+    case 1:
+      return selections.brand != null;
+    case 2:
+      return selections.bodyType != null;
+    case 3:
+      return selections.budget != null;
+    case 4:
+      return selections.usage.length > 0;
+    case 5:
+      return selections.priorities.length > 0;
+    case 6:
+      return selections.transmission != null;
+    case 7:
+      return selections.fuel != null;
+    default:
+      return false;
+  }
+}
+
+function canOpenStep(step: StepId, selections: FunnelSelections): boolean {
+  if (step === 1) return true;
+  return isStepComplete((step - 1) as StepId, selections);
+}
+
+function summaryForStep(step: StepId, selections: FunnelSelections): string | null {
+  switch (step) {
+    case 1:
+      return selections.brand;
+    case 2:
+      return selections.bodyType;
+    case 3:
+      return selections.budget;
+    case 4:
+      return selections.usage.length > 0 ? selections.usage.join(", ") : null;
+    case 5:
+      return selections.priorities.length > 0 ? selections.priorities.join(", ") : null;
+    case 6:
+      return selections.transmission;
+    case 7:
+      return selections.fuel;
+    default:
+      return null;
+  }
+}
+
+function isSelected(
   step: StepId,
-  brand: string | null,
-  body: string | null,
-  budget: string | null,
-): string | null {
-  if (step === 1) return brand;
-  if (step === 2) return body;
-  return budget;
+  label: string,
+  selections: FunnelSelections,
+): boolean {
+  switch (step) {
+    case 1:
+      return selections.brand === label;
+    case 2:
+      return selections.bodyType === label;
+    case 3:
+      return selections.budget === label;
+    case 4:
+      return selections.usage.includes(label);
+    case 5:
+      return selections.priorities.includes(label);
+    case 6:
+      return selections.transmission === label;
+    case 7:
+      return selections.fuel === label;
+    default:
+      return false;
+  }
 }
 
 type SelectionFunnelProps = {
-  onSelectionChange?: (summary: {
-    brand: string | null;
-    bodyType: string | null;
-    budget: string | null;
-  }) => void;
+  onSelectionChange?: (summary: FunnelSelections) => void;
   onAllCompleteChange?: (complete: boolean) => void;
 };
 
@@ -74,21 +166,20 @@ export function SelectionFunnel({
 }: SelectionFunnelProps) {
   const reduceMotion = useReducedMotion();
   const baseId = useId();
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [selectedBodyType, setSelectedBodyType] = useState<string | null>(null);
-  const [selectedBudget, setSelectedBudget] = useState<string | null>(null);
+  const [selections, setSelections] = useState<FunnelSelections>(EMPTY_FUNNEL_SELECTIONS);
   const [activeStep, setActiveStep] = useState<StepId | null>(1);
+  const [showAllBrands, setShowAllBrands] = useState(false);
   const onSelectionChangeRef = useRef(onSelectionChange);
   onSelectionChangeRef.current = onSelectionChange;
-  const panelRefs = useRef<Record<StepId, HTMLDivElement | null>>({
-    1: null,
-    2: null,
-    3: null,
-  });
+  const panelRefs = useRef<Partial<Record<StepId, HTMLDivElement | null>>>({});
   const [panelHeights, setPanelHeights] = useState<Record<StepId, number>>({
     1: 0,
     2: 0,
     3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
   });
 
   const measurePanel = useCallback((step: StepId) => {
@@ -98,14 +189,14 @@ export function SelectionFunnel({
   }, []);
 
   useEffect(() => {
-    ([1, 2, 3] as StepId[]).forEach(measurePanel);
-  }, [activeStep, selectedBrand, selectedBodyType, selectedBudget, measurePanel]);
+    ALL_STEPS.forEach(measurePanel);
+  }, [activeStep, selections, showAllBrands, measurePanel]);
 
   useEffect(() => {
     const ro = new ResizeObserver(() => {
-      ([1, 2, 3] as StepId[]).forEach(measurePanel);
+      ALL_STEPS.forEach(measurePanel);
     });
-    ([1, 2, 3] as StepId[]).forEach((step) => {
+    ALL_STEPS.forEach((step) => {
       const el = panelRefs.current[step];
       if (el) ro.observe(el);
     });
@@ -113,32 +204,52 @@ export function SelectionFunnel({
   }, [measurePanel]);
 
   useEffect(() => {
-    onSelectionChangeRef.current?.({
-      brand: selectedBrand,
-      bodyType: selectedBodyType,
-      budget: selectedBudget,
-    });
-  }, [selectedBrand, selectedBodyType, selectedBudget]);
+    onSelectionChangeRef.current?.(selections);
+  }, [selections]);
 
-  const allComplete =
-    selectedBrand != null &&
-    selectedBodyType != null &&
-    selectedBudget != null;
+  const allComplete = isFunnelCoreComplete(selections);
 
   useEffect(() => {
     onAllCompleteChange?.(allComplete);
   }, [allComplete, onAllCompleteChange]);
 
-  const handleSelect = (step: StepId, value: string) => {
-    if (step === 1) setSelectedBrand(value);
-    else if (step === 2) setSelectedBodyType(value);
-    else setSelectedBudget(value);
-
-    if (step < 3) {
+  const advanceFromStep = (step: StepId) => {
+    if (step < 7) {
       setActiveStep((step + 1) as StepId);
     } else {
       setActiveStep(null);
     }
+  };
+
+  const handleSingleSelect = (step: StepId, value: string) => {
+    setSelections((prev) => {
+      const next = { ...prev };
+      if (step === 1) next.brand = value;
+      else if (step === 2) next.bodyType = value;
+      else if (step === 3) next.budget = value;
+      else if (step === 6) next.transmission = value;
+      else if (step === 7) next.fuel = value;
+      return next;
+    });
+    advanceFromStep(step);
+  };
+
+  const handleMultiToggle = (step: StepId, value: string) => {
+    setSelections((prev) => {
+      const next = { ...prev };
+      if (step === 4) {
+        const set = new Set(prev.usage);
+        if (set.has(value)) set.delete(value);
+        else set.add(value);
+        next.usage = [...set];
+      } else if (step === 5) {
+        const set = new Set(prev.priorities);
+        if (set.has(value)) set.delete(value);
+        else set.add(value);
+        next.priorities = [...set];
+      }
+      return next;
+    });
   };
 
   const handleStepHeaderClick = (step: StepId) => {
@@ -146,37 +257,39 @@ export function SelectionFunnel({
       setActiveStep(null);
       return;
     }
-
-    const canOpen =
-      step === 1 ||
-      (step === 2 && selectedBrand != null) ||
-      (step === 3 && selectedBodyType != null);
-    if (!canOpen) return;
+    if (!canOpenStep(step, selections) && !isStepComplete(step, selections)) return;
     setActiveStep(step);
   };
 
   return (
     <motion.div
       layout
-      className="flex flex-col gap-1.5"
+      className="flex flex-col gap-1"
       transition={{ layout: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } }}
     >
       {STEPS.map((step) => {
-        const selected = selectionForStep(
-          step.id,
-          selectedBrand,
-          selectedBodyType,
-          selectedBudget,
-        );
-        const selectedIcon = findOptionIcon(step.options, selected);
-        const selectedLogo = findOptionLogo(step.options, selected);
+        const selected = summaryForStep(step.id, selections);
+        const singleLabel = step.mode === "single" ? selected : null;
+        const selectedLogo =
+          step.id === 1 ? findOptionLogo(step.options, selections.brand) : null;
+        const displayIcon =
+          step.id === 1
+            ? null
+            : step.mode === "single" && singleLabel
+              ? findOptionIcon(step.options, singleLabel)
+              : null;
+
         const isOpen = activeStep === step.id;
-        const isComplete = selected != null;
+        const isComplete = isStepComplete(step.id, selections);
         const isActive = isOpen;
-        const canOpen =
-          step.id === 1 ||
-          (step.id === 2 && selectedBrand != null) ||
-          (step.id === 3 && selectedBodyType != null);
+        const canOpen = canOpenStep(step.id, selections) || isComplete;
+
+        const multiCount =
+          step.id === 4
+            ? selections.usage.length
+            : step.id === 5
+              ? selections.priorities.length
+              : 0;
 
         return (
           <motion.div key={step.id} layout className="flex flex-col">
@@ -188,66 +301,59 @@ export function SelectionFunnel({
               disabled={!canOpen && !isComplete}
               onClick={() => handleStepHeaderClick(step.id)}
               className={cn(
-                "flex w-full items-center gap-2 rounded-none border px-3 py-2 text-left transition-[background-color,box-shadow,border-color,transform] duration-300",
+                "flex w-full items-center gap-2 rounded-md border px-3 py-2.5 text-left transition-[background-color,box-shadow,border-color] duration-300",
                 isActive
-                  ? "border-[#111111]/10 bg-[#111111] text-white shadow-[0_8px_24px_-8px_rgba(17,17,17,0.35)]"
+                  ? "border-border bg-white text-[#111111] shadow-premium-sm"
                   : isComplete
-                    ? "border-[#eaeaea] bg-white text-[#111111] shadow-[0_1px_3px_rgba(17,17,17,0.05)] hover:border-premium/30 hover:bg-[#fafafa]"
-                    : "border-[#eaeaea] bg-[#f8f8f7] text-[#6b6b6b] shadow-[0_1px_2px_rgba(17,17,17,0.03)]",
+                    ? "border-border bg-white text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] hover:border-premium/25"
+                    : "border-transparent bg-muted text-[#6b6b6b]",
                 !canOpen && !isComplete && "cursor-default opacity-70",
               )}
             >
               <span
                 className={cn(
-                  "flex size-5 shrink-0 items-center justify-center rounded-none text-[10px] font-bold",
-                  isActive
-                    ? "bg-premium/20 text-[#f0cc5a]"
-                    : isComplete
-                      ? "bg-[#111111]/[0.06] text-[#111111]"
-                      : "bg-[#eaeaea] text-[#9a9a9a]",
+                  "flex size-8 shrink-0 items-center justify-center rounded-sm text-[11px] font-bold",
+                  isComplete
+                    ? "bg-premium text-white"
+                    : isActive
+                      ? "bg-[#111111] text-white"
+                      : "bg-[#e8e8e8] text-[#9a9a9a]",
                 )}
               >
-                {step.id}
+                {isComplete ? (
+                  <Check className="size-4" strokeWidth={2.5} aria-hidden />
+                ) : (
+                  step.id
+                )}
               </span>
-              <span className="min-w-0 flex-1 truncate">
+              <span className="min-w-0 flex-1">
                 {isComplete && !isOpen ? (
-                  <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold">
-                    <span className={isActive ? "text-white/70" : "text-[#9a9a9a]"}>
-                      {step.label}:
-                    </span>
+                  <span className="inline-flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[13px] font-semibold sm:text-sm">
+                    <span className="shrink-0 text-[#9a9a9a]">{step.label}:</span>
                     {selectedLogo ? (
                       <img
                         src={selectedLogo}
                         alt=""
                         width={28}
                         height={18}
-                        className="h-4 w-auto object-contain"
+                        className="h-4 w-auto shrink-0 object-contain"
                       />
-                    ) : selectedIcon ? (
+                    ) : displayIcon ? (
                       <span className="text-sm leading-none" aria-hidden>
-                        {selectedIcon}
+                        {displayIcon}
                       </span>
                     ) : null}
-                    <span className={isActive ? "text-white" : "text-[#111111]"}>
-                      {selected}
-                    </span>
+                    <span className="text-[#111111]">{selected}</span>
                   </span>
                 ) : (
-                  <span
-                    className={cn(
-                      "text-[12px] font-semibold",
-                      isActive ? "text-white" : "text-[#111111]",
-                    )}
-                  >
-                    {step.title}
-                  </span>
+                  <span className="text-sm font-semibold text-[#111111]">{step.title}</span>
                 )}
               </span>
               <ChevronDown
                 className={cn(
                   "size-3.5 shrink-0 transition-transform duration-300",
                   isOpen ? "rotate-180" : "rotate-0",
-                  isActive ? "text-white/70" : "text-[#9a9a9a]",
+                  "text-[#9a9a9a]",
                 )}
               />
             </button>
@@ -275,49 +381,93 @@ export function SelectionFunnel({
               >
                 <AnimatePresence mode="wait">
                   {isOpen ? (
-                    <motion.div
-                      key={`open-${step.id}`}
-                      initial={
-                        step.id === 1 && !reduceMotion
-                          ? "hidden"
-                          : { opacity: 0, y: -6 }
-                      }
-                      animate={
-                        step.id === 1 && !reduceMotion
-                          ? "visible"
-                          : { opacity: 1, y: 0 }
-                      }
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{
-                        duration: step.id === 1 ? 0.32 : 0.28,
-                        ease: EASE_PREMIUM,
-                      }}
-                      variants={step.id === 1 && !reduceMotion ? brandGridVariants : undefined}
-                      className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4"
-                    >
-                      {step.options.map((option) =>
-                        step.id === 1 && !reduceMotion ? (
-                          <motion.div
-                            key={option.label}
-                            variants={brandCardVariants}
-                            className="min-w-0"
-                          >
+                    <>
+                      <motion.div
+                        key={`open-${step.id}`}
+                        initial={
+                          step.id === 1 && !reduceMotion
+                            ? "hidden"
+                            : { opacity: 0, y: -6 }
+                        }
+                        animate={
+                          step.id === 1 && !reduceMotion
+                            ? "visible"
+                            : { opacity: 1, y: 0 }
+                        }
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{
+                          duration: step.id === 1 ? 0.32 : 0.28,
+                          ease: EASE_PREMIUM,
+                        }}
+                        variants={step.id === 1 && !reduceMotion ? brandGridVariants : undefined}
+                        className={cn(
+                          "grid gap-2",
+                          step.id === 1
+                            ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+                            : step.id <= 3
+                              ? "grid-cols-2 sm:grid-cols-3"
+                              : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4",
+                        )}
+                      >
+                        {(step.id === 1 && !showAllBrands
+                          ? step.options.slice(0, BRAND_PREVIEW_COUNT)
+                          : step.options
+                        ).map((option) =>
+                          step.id === 1 && !reduceMotion ? (
+                            <motion.div
+                              key={option.label}
+                              variants={brandCardVariants}
+                              className="min-w-0 w-full"
+                            >
+                              <SelectionOptionCard
+                                option={option}
+                                selected={isSelected(step.id, option.label, selections)}
+                                onSelect={() => handleSingleSelect(step.id, option.label)}
+                              />
+                            </motion.div>
+                          ) : (
                             <SelectionOptionCard
+                              key={option.label}
                               option={option}
-                              selected={selected === option.label}
-                              onSelect={() => handleSelect(step.id, option.label)}
+                              selected={isSelected(step.id, option.label, selections)}
+                              onSelect={() =>
+                                step.mode === "multi"
+                                  ? handleMultiToggle(step.id, option.label)
+                                  : handleSingleSelect(step.id, option.label)
+                              }
                             />
-                          </motion.div>
-                        ) : (
-                          <SelectionOptionCard
-                            key={option.label}
-                            option={option}
-                            selected={selected === option.label}
-                            onSelect={() => handleSelect(step.id, option.label)}
-                          />
-                        ),
-                      )}
-                    </motion.div>
+                          ),
+                        )}
+                      </motion.div>
+                      {step.id === 1 &&
+                      !showAllBrands &&
+                      step.options.length > BRAND_PREVIEW_COUNT ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowAllBrands(true)}
+                          className="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-sm border border-dashed border-[#e0e0e0] bg-[#fafafa] py-2 text-[12px] font-semibold text-[#6b6b6b] transition hover:border-premium/30 hover:text-[#111111]"
+                        >
+                          Mehr anzeigen
+                          <ChevronDown className="size-3.5" />
+                        </button>
+                      ) : null}
+                      {step.mode === "multi" ? (
+                        <button
+                          type="button"
+                          disabled={multiCount === 0}
+                          onClick={() => advanceFromStep(step.id)}
+                          className={cn(
+                            "mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-sm border border-dashed py-2 text-[12px] font-semibold transition",
+                            multiCount > 0
+                              ? "border-premium/35 bg-premium/5 text-[#111111] hover:border-premium/50"
+                              : "cursor-not-allowed border-[#e0e0e0] bg-[#fafafa] text-[#9a9a9a] opacity-70",
+                          )}
+                        >
+                          Weiter
+                          <ChevronDown className="size-3.5 -rotate-90" />
+                        </button>
+                      ) : null}
+                    </>
                   ) : null}
                 </AnimatePresence>
               </div>
