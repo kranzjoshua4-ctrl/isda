@@ -55,7 +55,7 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
       animate="visible"
       variants={containerVariants}
       className={cn(
-        "mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-3.5 text-[11px] font-semibold sm:mt-7 sm:text-xs",
+        "mt-6 flex w-full max-w-none flex-nowrap items-center justify-start gap-3.5 text-xs font-semibold sm:mt-7 sm:gap-4 sm:text-[13px]",
         className,
       )}
     >
@@ -68,19 +68,19 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
         const node = isActive ? (
           <motion.span
             aria-current="step"
-            className="rounded-md bg-premium px-3.5 py-1.5 text-white shadow-[0_8px_24px_rgb(232_90_40/0.28)]"
+            className="rounded-md bg-premium px-4 py-2 text-white shadow-[0_8px_24px_rgb(232_90_40/0.28)]"
           >
             {label}
           </motion.span>
         ) : isDone ? (
           <Link
             href={s.href}
-            className="rounded-md border border-border bg-white px-3.5 py-1.5 text-[#6b6b6b] transition hover:border-premium/30 hover:text-[#111111]"
+            className="rounded-md border border-border bg-white px-4 py-2 text-[#6b6b6b] transition hover:border-premium/30 hover:text-[#111111]"
           >
             {label}
           </Link>
         ) : (
-          <span className="rounded-md border border-border bg-white px-3.5 py-1.5 text-[#9a9a9a]">
+          <span className="rounded-md border border-border bg-white px-4 py-2 text-[#9a9a9a]">
             {label}
           </span>
         );
@@ -89,12 +89,12 @@ export function BookingProgressNav({ active, className }: BookingProgressNavProp
           <motion.span
             key={s.label}
             variants={segmentVariants}
-            className="flex items-center gap-1.5"
+            className="flex shrink-0 items-center gap-1.5 whitespace-nowrap"
           >
             {node}
             {i < STEPS.length - 1 ? (
               <motion.span variants={chevronVariants} className="inline-flex">
-                <ChevronRight className="size-3.5 shrink-0 text-premium/70" aria-hidden />
+                <ChevronRight className="size-4 shrink-0 text-premium/70" aria-hidden />
               </motion.span>
             ) : null}
           </motion.span>

@@ -7,8 +7,8 @@ function joinList(items: string[], conjunction = "und"): string {
   return `${items.slice(0, -1).join(", ")} ${conjunction} ${items.at(-1)!}`;
 }
 
-function formatBudget(budget: string): string {
-  return budget.replace(/^unter\s+/i, "bis ");
+function formatBudgetMax(max: number): string {
+  return `bis ${max.toLocaleString("de-DE")} €`;
 }
 
 const PRIORITY_PHRASES: Record<string, string> = {
@@ -21,7 +21,6 @@ const PRIORITY_PHRASES: Record<string, string> = {
   "Modernes Design": "modernes Design",
   Sicherheit: "Sicherheit",
   "Hohe Sitzposition": "hohe Sitzposition",
-  Automatik: "Automatik",
   Wertstabilität: "Wertstabilität",
 };
 
@@ -48,32 +47,48 @@ function formatPriorities(items: string[]): string {
   return joinList(mapped);
 }
 
-function formatFuel(fuel: string): string {
-  if (fuel === "Egal") return "";
-  if (fuel === "Plug-in Hybrid") return "Plug-in-Hybrid-Antrieb";
-  if (fuel === "Elektro") return "Elektro-Antrieb";
-  return `${fuel}-Antrieb`;
-}
-
 function formatTransmission(transmission: string): string {
   if (transmission === "Egal") return "";
   return transmission;
 }
 
+function formatDrive(drive: string): string {
+  if (drive === "Egal") return "";
+  return drive;
+}
+
+const MILEAGE_PHRASES: Record<string, string> = {
+  "0–50 TKM": "mit max. 50.000 km",
+  "50–100 TKM": "mit 50.000–100.000 km",
+  "100–150 TKM": "mit 100.000–150.000 km",
+  "150–200 TKM": "mit 150.000–200.000 km",
+  "Über 200 TKM": "mit über 200.000 km",
+};
+
+function formatMileage(mileage: string): string {
+  return MILEAGE_PHRASES[mileage] ?? `mit ${mileage}`;
+}
+
 /** Natürlicher Suchtext für die rechte Box — kein rohes Filterdump. */
 export function buildNaturalSearchText(selections: FunnelSelections): string {
-  const { brand, bodyType, budget, usage, priorities, transmission, fuel } = selections;
+  const { brands, bodyType, budgetMax, mileage, usage, priorities, transmission, drive } =
+    selections;
   const segments: string[] = [];
 
-  const vehicleParts = [brand, bodyType].filter(Boolean) as string[];
+  const brandPhrase = brands.length > 0 ? joinList(brands, "oder") : "";
+  const vehicleParts = [brandPhrase, bodyType].filter(Boolean);
   if (vehicleParts.length > 0) {
     let lead = vehicleParts.join(" ");
-    if (budget) {
-      lead = `${lead} ${formatBudget(budget)}`;
+    if (budgetMax != null) {
+      lead = `${lead} ${formatBudgetMax(budgetMax)}`;
     }
     segments.push(lead);
-  } else if (budget) {
-    segments.push(formatBudget(budget));
+  } else if (budgetMax != null) {
+    segments.push(formatBudgetMax(budgetMax));
+  }
+
+  if (mileage) {
+    segments.push(formatMileage(mileage));
   }
 
   if (usage.length > 0) {
@@ -81,14 +96,14 @@ export function buildNaturalSearchText(selections: FunnelSelections): string {
   }
 
   const transmissionPhrase = transmission ? formatTransmission(transmission) : "";
-  const fuelPhrase = fuel ? formatFuel(fuel) : "";
+  const drivePhrase = drive ? formatDrive(drive) : "";
 
-  if (transmissionPhrase && fuelPhrase) {
-    segments.push(`mit ${transmissionPhrase}, ${fuelPhrase}`);
+  if (transmissionPhrase && drivePhrase) {
+    segments.push(`mit ${transmissionPhrase}, ${drivePhrase}`);
   } else if (transmissionPhrase) {
     segments.push(`mit ${transmissionPhrase}`);
-  } else if (fuelPhrase) {
-    segments.push(`mit ${fuelPhrase}`);
+  } else if (drivePhrase) {
+    segments.push(`mit ${drivePhrase}`);
   }
 
   if (priorities.length > 0) {
@@ -104,12 +119,13 @@ export function buildNaturalSearchText(selections: FunnelSelections): string {
 
 export function isFunnelCoreComplete(selections: FunnelSelections): boolean {
   return (
-    selections.brand != null &&
+    selections.brands.length > 0 &&
     selections.bodyType != null &&
-    selections.budget != null &&
+    selections.budgetMax != null &&
+    selections.mileage != null &&
     selections.usage.length > 0 &&
     selections.priorities.length > 0 &&
     selections.transmission != null &&
-    selections.fuel != null
+    selections.drive != null
   );
 }

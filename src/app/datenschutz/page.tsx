@@ -11,7 +11,6 @@ import {
   HardDrive,
   Lock,
   Mail,
-  Mic,
   RefreshCcw,
   ScrollText,
   Server,
@@ -43,7 +42,7 @@ const supervisoryAuthority = {
 
 function SectionNumber({ n }: { n: number }) {
   return (
-    <span className="inline-flex h-7 min-w-[2.5rem] items-center justify-center rounded-none bg-cta-navy px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-cta">
+    <span className="inline-flex h-7 min-w-[2.5rem] items-center justify-center rounded-sm bg-cta-navy px-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-cta">
       § {String(n).padStart(2, "0")}
     </span>
   );
@@ -66,12 +65,12 @@ function PrivacySection({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className="group scroll-mt-28 rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.07),0_4px_14px_rgba(15,23,42,0.05)] backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_24px_64px_rgba(15,23,42,0.1),0_8px_22px_rgba(15,23,42,0.06)] sm:p-7"
+      className="group scroll-mt-28 rounded-sm border border-border bg-white p-6 shadow-[0_10px_30px_rgb(17_17_17/0.05)] transition-shadow duration-300 hover:shadow-[0_14px_40px_rgb(17_17_17/0.07)] sm:p-7"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
         <div className="flex items-center gap-3">
           <span
-            className="flex size-10 shrink-0 items-center justify-center rounded-none border border-[rgba(148,163,184,0.32)] bg-[#f8fafc] text-[#0a0a0a] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_1px_2px_rgba(15,23,42,0.04)]"
+            className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-premium/10 text-premium"
             aria-hidden
           >
             {icon}
@@ -81,11 +80,11 @@ function PrivacySection({
         <div className="min-w-0 flex-1">
           <h2
             id={`${id}-heading`}
-            className="font-display text-lg font-semibold leading-snug tracking-tight text-[#0f172a] sm:text-xl"
+            className="font-display text-lg font-semibold leading-snug tracking-tight text-[#111111] sm:text-xl"
           >
             {title}
           </h2>
-          <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#475569] [&_a]:font-medium [&_a]:text-[#0a0a0a] [&_a]:underline [&_a]:decoration-[rgba(15,23,42,0.25)] [&_a]:underline-offset-2 [&_a:hover]:decoration-[#0a0a0a] [&_strong]:font-semibold [&_strong]:text-[#0f172a]">
+          <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#6b6b6b] [&_a]:font-medium [&_a]:text-[#111111] [&_a]:underline [&_a]:decoration-[#d8d8d8] [&_a]:underline-offset-2 [&_a:hover]:decoration-premium/60 [&_strong]:font-semibold [&_strong]:text-[#111111]">
             {children}
           </div>
         </div>
@@ -129,42 +128,42 @@ export default function DatenschutzPage() {
 
       <div className="relative mx-auto max-w-3xl px-4 pb-20 pt-12 sm:px-6 sm:pt-16">
         <div
-          className="pointer-events-none absolute left-1/2 top-0 h-64 w-[120%] -translate-x-1/2 bg-gradient-to-b from-[rgba(15,23,42,0.06)] via-transparent to-transparent blur-3xl"
+          className="pointer-events-none absolute left-1/2 top-0 h-64 w-[120%] -translate-x-1/2 bg-gradient-to-b from-[rgb(17_17_17/0.04)] via-transparent to-transparent blur-3xl"
           aria-hidden
         />
 
         <header className="relative z-10 mb-10 text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#64748b]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#9a9a9a]">
             Rechtliche Hinweise · DSGVO
           </p>
-          <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-[#0f172a] sm:text-4xl md:text-[2.65rem]">
+          <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-[#111111] sm:text-4xl md:text-[2.65rem]">
             Datenschutzerklärung
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-[#475569] sm:text-[15px]">
+          <p className="mx-auto mt-4 max-w-xl text-pretty text-sm leading-relaxed text-[#6b6b6b] sm:text-[15px]">
             Informationen gemäß Art. 13 und 14 Datenschutz-Grundverordnung (DSGVO) sowie § 13
             Telemediengesetz (TMG) zur Verarbeitung personenbezogener Daten beim Besuch und der
             Nutzung von{" "}
             <Link
               href="/"
-              className="font-medium text-[#0a0a0a] underline decoration-[rgba(15,23,42,0.25)] underline-offset-2 transition hover:decoration-[#0a0a0a]"
+              className="font-medium text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
             >
               ichsuchdeinauto.de
             </Link>
             .
           </p>
-          <p className="mt-3 text-xs text-[#64748b]">
+          <p className="mt-3 text-xs text-[#9a9a9a]">
             Stand: {updated} · © {year} {business.name}
           </p>
         </header>
 
         <nav
           aria-label="Inhaltsverzeichnis Datenschutzerklärung"
-          className="relative z-10 mb-10 rounded-none border border-[rgba(148,163,184,0.28)] bg-white/80 p-5 text-sm shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] backdrop-blur-md"
+          className="relative z-10 mb-10 rounded-sm border border-border bg-white/80 p-5 text-sm shadow-[0_10px_30px_rgb(17_17_17/0.05)] backdrop-blur-md"
         >
-          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-[#64748b]">
+          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.18em] text-[#9a9a9a]">
             Inhalt
           </p>
-          <ol className="mt-3 grid gap-1.5 text-[13px] leading-relaxed text-[#475569] sm:grid-cols-2">
+          <ol className="mt-3 grid gap-1.5 text-[13px] leading-relaxed text-[#6b6b6b] sm:grid-cols-2">
             {[
               ["verantwortlicher", "Verantwortlicher"],
               ["geltungsbereich", "Geltungsbereich & Begriffe"],
@@ -175,7 +174,6 @@ export default function DatenschutzPage() {
               ["anfrage", "Anfrage- und Suchauftragsformular"],
               ["termin", "Terminbuchung"],
               ["zahlung", "Zahlungsabwicklung via Stripe"],
-              ["spracheingabe", "Spracheingabe (Web Speech API)"],
               ["cookies", "Cookies & Tracking"],
               ["empfaenger", "Empfänger & Auftragsverarbeiter"],
               ["drittland", "Datenübermittlung in Drittländer"],
@@ -185,10 +183,10 @@ export default function DatenschutzPage() {
               ["aenderungen", "Änderungen dieser Erklärung"],
             ].map(([id, label]) => (
               <li key={id} className="flex items-start gap-2">
-                <span className="mt-1 size-1 shrink-0 rounded-full bg-[#cbd5e1]" aria-hidden />
+                <span className="mt-1 size-1 shrink-0 rounded-full bg-[#d8d8d8]" aria-hidden />
                 <Link
                   href={`#${id}`}
-                  className="text-[#0f172a] transition hover:text-[#0a0a0a] hover:underline hover:decoration-[#0a0a0a] hover:underline-offset-2"
+                  className="text-[#111111] transition hover:underline hover:decoration-premium/60 hover:underline-offset-2"
                 >
                   {label}
                 </Link>
@@ -235,7 +233,7 @@ export default function DatenschutzPage() {
           >
             <p>
               Diese Datenschutzerklärung gilt für die Domain{" "}
-              <span className="font-mono text-[13px] text-[#0f172a]">ichsuchdeinauto.de</span> und
+              <span className="font-mono text-[13px] text-[#111111]">ichsuchdeinauto.de</span> und
               alle darunter erreichbaren Unterseiten sowie für etwaige damit verbundene
               Kommunikationskanäle (z. B. E-Mail).
             </p>
@@ -264,7 +262,7 @@ export default function DatenschutzPage() {
             <p>
               Mit dem Hosting-Dienstleister besteht ein Vertrag über Auftragsverarbeitung im Sinne
               des Art. 28 DSGVO. Eine Übermittlung in Drittländer findet nur statt, soweit dies in
-              §&nbsp;13 dieser Erklärung dargestellt ist und auf Grundlage geeigneter Garantien
+              §&nbsp;12 dieser Erklärung dargestellt ist und auf Grundlage geeigneter Garantien
               (z.&nbsp;B. EU-Standardvertragsklauseln) erfolgt.
             </p>
           </PrivacySection>
@@ -413,33 +411,8 @@ export default function DatenschutzPage() {
           </PrivacySection>
 
           <PrivacySection
-            id="spracheingabe"
-            n={10}
-            title="Spracheingabe (Web Speech API)"
-            icon={<Mic className="size-4" strokeWidth={1.75} aria-hidden />}
-          >
-            <p>
-              Im Eingabefeld der Startseite besteht die Möglichkeit, Ihre Fahrzeugbeschreibung per
-              Mikrofon zu diktieren. Diese Funktion nutzt die Web Speech API Ihres Browsers. Die
-              Sprachverarbeitung erfolgt — abhängig von Ihrem Browser bzw. Betriebssystem — entweder
-              lokal auf Ihrem Gerät oder über die jeweiligen Server des Anbieters (z. B. Google bei
-              Chrome). Auf den Verarbeitungsweg und auf etwaige Datenübermittlungen Ihres Browsers
-              haben wir keinen Einfluss.
-            </p>
-            <p>
-              An unsere Server wird ausschließlich das Ergebnis (der erkannte Text) übermittelt, und
-              auch nur dann, wenn Sie Ihre Anfrage anschließend bewusst absenden. Rechtsgrundlage
-              für die Übermittlung des Ergebnisses an uns ist Art. 6 Abs. 1 lit. b DSGVO.
-            </p>
-            <p>
-              Bitte beachten Sie die Datenschutzhinweise Ihres Browser-Herstellers für Details zur
-              dortigen Sprachverarbeitung.
-            </p>
-          </PrivacySection>
-
-          <PrivacySection
             id="cookies"
-            n={11}
+            n={10}
             title="Cookies & Tracking"
             icon={<Cookie className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -459,7 +432,7 @@ export default function DatenschutzPage() {
 
           <PrivacySection
             id="empfaenger"
-            n={12}
+            n={11}
             title="Empfänger & Auftragsverarbeiter"
             icon={<ShieldCheck className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -494,7 +467,7 @@ export default function DatenschutzPage() {
 
           <PrivacySection
             id="drittland"
-            n={13}
+            n={12}
             title="Datenübermittlung in Drittländer"
             icon={<Globe2 className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -513,7 +486,7 @@ export default function DatenschutzPage() {
 
           <PrivacySection
             id="speicherdauer"
-            n={14}
+            n={13}
             title="Speicherdauer"
             icon={<RefreshCcw className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -532,7 +505,7 @@ export default function DatenschutzPage() {
 
           <PrivacySection
             id="rechte"
-            n={15}
+            n={14}
             title="Ihre Rechte als betroffene Person"
             icon={<Eye className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -573,7 +546,7 @@ export default function DatenschutzPage() {
 
           <PrivacySection
             id="beschwerde"
-            n={16}
+            n={15}
             title="Beschwerderecht bei der Aufsichtsbehörde"
             icon={<Mail className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -604,7 +577,7 @@ export default function DatenschutzPage() {
 
           <PrivacySection
             id="aenderungen"
-            n={17}
+            n={16}
             title="Änderungen dieser Datenschutzerklärung"
             icon={<RefreshCcw className="size-4" strokeWidth={1.75} aria-hidden />}
           >
@@ -621,30 +594,30 @@ export default function DatenschutzPage() {
           </PrivacySection>
         </article>
 
-        <footer className="relative z-10 mt-12 rounded-none border border-[rgba(148,163,184,0.28)] bg-white/90 p-6 text-center text-xs leading-relaxed text-[#64748b] shadow-[0_14px_40px_rgba(15,23,42,0.06),0_4px_12px_rgba(15,23,42,0.04)] sm:text-[13px]">
+        <footer className="relative z-10 mt-12 rounded-sm border border-border bg-white p-6 text-center text-xs leading-relaxed text-[#9a9a9a] shadow-[0_10px_30px_rgb(17_17_17/0.05)] sm:text-[13px]">
           <p>
             Diese Datenschutzerklärung wurde mit größter Sorgfalt erstellt und auf die DSGVO sowie
             das BDSG abgestimmt. Sie ersetzt keine individuelle Rechtsberatung; bei rechtlichen
             Fragen wenden Sie sich bitte an eine fachkundige Person.
           </p>
-          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[#475569]">
+          <p className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[#6b6b6b]">
             <Link
               href="/impressum"
-              className="font-medium text-[#0a0a0a] underline decoration-[rgba(15,23,42,0.25)] underline-offset-2 transition hover:decoration-[#0a0a0a]"
+              className="font-medium text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
             >
               Impressum
             </Link>
             <span aria-hidden>·</span>
             <Link
               href="/kontakt"
-              className="font-medium text-[#0a0a0a] underline decoration-[rgba(15,23,42,0.25)] underline-offset-2 transition hover:decoration-[#0a0a0a]"
+              className="font-medium text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
             >
               Kontakt
             </Link>
             <span aria-hidden>·</span>
             <Link
               href="/"
-              className="font-medium text-[#0a0a0a] underline decoration-[rgba(15,23,42,0.25)] underline-offset-2 transition hover:decoration-[#0a0a0a]"
+              className="font-medium text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
             >
               Zur Startseite
             </Link>

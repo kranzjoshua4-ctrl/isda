@@ -49,7 +49,7 @@ const meta: Record<
   },
   sepa: {
     icon: siSepa,
-    tint: "text-[#0f172a]",
+    tint: "text-[#111111]",
     subtitle: "Bequem per Bankeinzug",
   },
   card: {
@@ -59,7 +59,7 @@ const meta: Record<
   },
   apple_pay: {
     icon: siApplepay,
-    tint: "text-[#0f172a]",
+    tint: "text-[#111111]",
     subtitle: "Wallet auf dem Gerät",
   },
   google_pay: {
@@ -101,23 +101,21 @@ export function PaymentMethods({
               transition={{ delay: 0.03 * i, duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => onChange(id)}
               className={cn(
-                "group relative flex w-full items-center overflow-hidden rounded-none border text-left transition-[transform,border-color,box-shadow,background-color] duration-200 ease-out",
+                "group relative flex w-full items-center overflow-hidden rounded-sm border text-left transition-[transform,border-color,box-shadow,background-color] duration-200 ease-out",
                 compact
                   ? "min-h-[38px] gap-2 px-2.5 py-2 sm:gap-2 sm:px-2.5 sm:py-2"
-                  : "min-h-[44px] gap-2.5 rounded-none px-3 py-2.5 sm:gap-3 sm:px-3.5 sm:py-2.5",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/25 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                  : "min-h-[44px] gap-2.5 px-3 py-2.5 sm:gap-3 sm:px-3.5 sm:py-2.5",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                 active
-                  ? "border-[#0a0a0a]/45 bg-[rgba(10,10,10,0.06)] shadow-[0_0_0_1px_rgba(10,10,10,0.12),0_6px_18px_-10px_rgba(15,23,42,0.08)]"
-                  : "border-[rgba(148,163,184,0.35)] bg-white/90 hover:-translate-y-px hover:border-[#0a0a0a]/30 hover:shadow-[0_6px_20px_-10px_rgba(15,23,42,0.1)]",
+                  ? "border-premium/40 bg-white ring-2 ring-premium/15 shadow-[0_6px_18px_-10px_rgb(17_17_17/0.1)]"
+                  : "border-border bg-white hover:-translate-y-px hover:border-premium/30 hover:shadow-[0_6px_20px_-10px_rgb(17_17_17/0.1)]",
               )}
             >
               <span
                 className={cn(
-                  "flex shrink-0 items-center justify-center rounded-none border p-0.5",
-                  compact ? "size-8" : "size-9 rounded-none p-1 sm:size-10",
-                  active
-                    ? "border-[rgba(10,10,10,0.18)] bg-white"
-                    : "border-[rgba(148,163,184,0.35)] bg-[#f8fafc]",
+                  "flex shrink-0 items-center justify-center rounded-sm border p-0.5",
+                  compact ? "size-8" : "size-9 p-1 sm:size-10",
+                  active ? "border-premium/25 bg-white" : "border-border bg-[#fafafa]",
                 )}
               >
                 <BrandIcon
@@ -128,7 +126,7 @@ export function PaymentMethods({
               <span className="min-w-0 flex-1">
                 <span
                   className={cn(
-                    "block font-semibold leading-tight tracking-tight text-[#0f172a]",
+                    "block font-semibold leading-tight tracking-tight text-[#111111]",
                     compact ? "text-[12px]" : "text-[13px]",
                   )}
                 >
@@ -136,7 +134,7 @@ export function PaymentMethods({
                 </span>
                 <span
                   className={cn(
-                    "block leading-snug text-[#64748b]",
+                    "block leading-snug text-[#9a9a9a]",
                     compact ? "mt-0 text-[10px] leading-tight" : "mt-0.5 text-[11px]",
                   )}
                 >
@@ -145,11 +143,11 @@ export function PaymentMethods({
               </span>
               <span
                 className={cn(
-                  "flex shrink-0 items-center justify-center rounded-none border-2 transition-colors duration-200",
+                  "flex shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-200",
                   compact ? "size-4" : "size-5",
                   active
-                    ? "border-[#0a0a0a] bg-cta-navy text-white"
-                    : "border-[rgba(148,163,184,0.55)] bg-transparent group-hover:border-[#0a0a0a]/35",
+                    ? "border-premium bg-premium text-white"
+                    : "border-[#d8d8d8] bg-transparent group-hover:border-premium/40",
                 )}
                 aria-hidden
               >

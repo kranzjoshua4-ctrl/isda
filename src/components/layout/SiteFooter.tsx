@@ -9,7 +9,7 @@ const footerLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative z-10 mt-16 border-t border-border bg-transparent pt-8">
+    <footer className="relative z-10 mt-20 border-t border-border bg-transparent pt-8 sm:mt-24">
       <div className="page-container flex flex-col gap-8 py-14 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-display text-base font-semibold tracking-tight text-foreground">

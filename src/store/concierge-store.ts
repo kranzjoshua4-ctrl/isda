@@ -9,6 +9,7 @@ import type {
   PaymentMethodId,
 } from "@/types/concierge";
 import { OPEN_LABEL } from "@/types/concierge";
+import { EMPTY_FUNNEL_SELECTIONS, type FunnelSelections } from "@/types/funnel";
 
 const defaultCustomer: CustomerDetails = {
   vorname: "",
@@ -33,12 +34,14 @@ const emptyExtracted = (): ExtractedAttributes => ({
 
 type ConciergeState = {
   vehicleRequest: string;
+  funnelSelections: FunnelSelections;
   extracted: ExtractedAttributes;
   customer: CustomerDetails;
   booking: BookingSelection | null;
   checkoutSessionId: string | null;
   selectedPaymentMethod: PaymentMethodId | null;
   setVehicleRequest: (text: string) => void;
+  setFunnelSelections: (selections: FunnelSelections) => void;
   refreshExtraction: () => void;
   setExtracted: (partial: Partial<ExtractedAttributes>) => void;
   setCustomer: (partial: Partial<CustomerDetails>) => void;
@@ -52,6 +55,7 @@ export const useConciergeStore = create<ConciergeState>()(
   persist(
     (set, get) => ({
       vehicleRequest: "",
+      funnelSelections: { ...EMPTY_FUNNEL_SELECTIONS },
       extracted: emptyExtracted(),
       customer: { ...defaultCustomer },
       booking: null,
@@ -62,6 +66,7 @@ export const useConciergeStore = create<ConciergeState>()(
           vehicleRequest: text,
           extracted: parseVehicleRequest(text),
         }),
+      setFunnelSelections: (funnelSelections) => set({ funnelSelections }),
       refreshExtraction: () =>
         set({ extracted: parseVehicleRequest(get().vehicleRequest) }),
       setExtracted: (partial) =>
@@ -75,6 +80,7 @@ export const useConciergeStore = create<ConciergeState>()(
       resetJourney: () =>
         set({
           vehicleRequest: "",
+          funnelSelections: { ...EMPTY_FUNNEL_SELECTIONS },
           extracted: emptyExtracted(),
           customer: { ...defaultCustomer },
           booking: null,
@@ -86,6 +92,7 @@ export const useConciergeStore = create<ConciergeState>()(
       name: "ichsuchdeinauto-concierge",
       partialize: (s) => ({
         vehicleRequest: s.vehicleRequest,
+        funnelSelections: s.funnelSelections,
         extracted: s.extracted,
         customer: s.customer,
         booking: s.booking,
@@ -105,6 +112,10 @@ export const useConciergeStore = create<ConciergeState>()(
         return {
           ...current,
           ...p,
+          funnelSelections: {
+            ...EMPTY_FUNNEL_SELECTIONS,
+            ...(p.funnelSelections ?? current.funnelSelections),
+          },
           extracted: {
             ...current.extracted,
             ...(p.extracted ?? {}),

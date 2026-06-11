@@ -30,6 +30,12 @@ export type PremiumCalendarProps = {
 };
 
 const monthFmt = new Intl.DateTimeFormat("de-DE", { month: "short" });
+const fullDateFmt = new Intl.DateTimeFormat("de-DE", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 
 export function PremiumCalendar({ selected, onSelect, className }: PremiumCalendarProps) {
   const today = startOfDay(new Date());
@@ -50,16 +56,17 @@ export function PremiumCalendar({ selected, onSelect, className }: PremiumCalend
               transition={{ delay: 0.02 * i, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => onSelect(d)}
               aria-pressed={active}
+              aria-label={`${fullDateFmt.format(d)}${isToday ? " (heute)" : ""}`}
               className={cn(
-                "group relative flex min-h-[4.25rem] flex-col items-center justify-center rounded-none border px-1.5 py-2.5 text-center transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8fafc]",
+                "group relative flex min-h-[4.25rem] flex-col items-center justify-center rounded-sm border px-1.5 py-2.5 text-center transition-[transform,box-shadow,border-color,background-color] duration-200 ease-out",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                 active
-                  ? "border-transparent bg-cta-navy text-white shadow-[0_12px_28px_-8px_rgba(0,0,0,0.42)]"
-                  : "border-[rgba(148,163,184,0.35)] bg-[#f8fafc] hover:-translate-y-0.5 hover:border-[#0a0a0a]/35 hover:bg-white hover:shadow-[0_8px_24px_-10px_rgba(15,23,42,0.12)] active:translate-y-0",
+                  ? "border-transparent bg-cta-navy text-white shadow-cta"
+                  : "border-border bg-[#fafafa] hover:-translate-y-0.5 hover:border-premium/30 hover:bg-white hover:shadow-[0_8px_24px_-10px_rgb(17_17_17/0.12)] active:translate-y-0",
               )}
             >
               {isToday && !active ? (
-                <span className="absolute left-1 top-1 rounded bg-[#eef3f7] px-1 py-px text-[0.55rem] font-semibold uppercase tracking-[0.08em] text-[#475569]">
+                <span className="absolute left-1 top-1 rounded bg-premium/10 px-1 py-px text-[0.55rem] font-semibold uppercase tracking-[0.08em] text-premium">
                   Heute
                 </span>
               ) : null}
@@ -71,7 +78,7 @@ export function PremiumCalendar({ selected, onSelect, className }: PremiumCalend
               <span
                 className={cn(
                   "text-[0.6rem] font-semibold uppercase tracking-[0.14em]",
-                  active ? "text-white/85" : "text-[#64748b]",
+                  active ? "text-white/85" : "text-[#9a9a9a]",
                 )}
               >
                 {WEEKDAYS_SHORT[d.getDay()]}
@@ -79,7 +86,7 @@ export function PremiumCalendar({ selected, onSelect, className }: PremiumCalend
               <span
                 className={cn(
                   "mt-0.5 text-lg font-semibold tabular-nums leading-none tracking-tight",
-                  active ? "text-white" : "text-[#0f172a]",
+                  active ? "text-white" : "text-[#111111]",
                 )}
               >
                 {d.getDate()}
@@ -87,7 +94,7 @@ export function PremiumCalendar({ selected, onSelect, className }: PremiumCalend
               <span
                 className={cn(
                   "mt-0.5 text-[0.65rem] capitalize leading-tight",
-                  active ? "text-white/80" : "text-[#64748b]",
+                  active ? "text-white/80" : "text-[#9a9a9a]",
                 )}
               >
                 {monthFmt.format(d)} {d.getFullYear()}

@@ -86,9 +86,31 @@ const processSteps: { title: string; body: string; icon: LucideIcon }[] = [
 
 const inDemand = ["SUV", "Kombi", "Kleinwagen", "Elektro"] as const;
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function SectionLabel({
+  children,
+  centered,
+}: {
+  children: React.ReactNode;
+  centered?: boolean;
+}) {
   return (
-    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-premium">{children}</p>
+    <p
+      className={cn(
+        "inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-premium",
+      )}
+    >
+      <span
+        aria-hidden
+        className="h-px w-7 bg-gradient-to-r from-transparent to-premium/60"
+      />
+      {children}
+      {centered ? (
+        <span
+          aria-hidden
+          className="h-px w-7 bg-gradient-to-l from-transparent to-premium/60"
+        />
+      ) : null}
+    </p>
   );
 }
 
@@ -112,23 +134,37 @@ function PremiumFeatureCard({
       viewport={{ once: true, margin: "-48px" }}
       transition={{ duration: 0.48, delay: 0.05 * index, ease }}
       className={cn(
-        "group relative flex h-full flex-col rounded-none border border-[#111111]/[0.06] bg-white/90 p-7 shadow-premium-sm backdrop-blur-sm transition duration-300",
-        "hover:-translate-y-1 hover:border-premium/22 hover:shadow-premium",
-        "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-br before:from-premium/[0.06] before:via-transparent before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 group-hover:before:opacity-100",
+        "group relative flex h-full flex-col overflow-hidden rounded-sm border border-[#111111]/[0.06] bg-white/90 p-7 shadow-premium-sm backdrop-blur-sm transition duration-300",
+        "hover:-translate-y-1 hover:border-premium/30 hover:shadow-premium",
+        "before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-br before:from-premium/[0.05] before:via-transparent before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 group-hover:before:opacity-100",
         className,
       )}
     >
+      {/* Ghost-Nummer */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -top-2 right-3 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-[#111111]/[0.04] transition-colors duration-300 group-hover:text-premium/12"
+      >
+        {String(index + 1).padStart(2, "0")}
+      </span>
       <div
-        className="relative mb-6 flex h-12 w-12 items-center justify-center rounded-none border border-[#111111]/[0.06] bg-[#f8f8f7] text-[#111111] shadow-[inset_0_1px_0_rgb(255_255_255/0.95)] transition duration-300 group-hover:border-premium/25 group-hover:text-premium"
+        className="relative mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-premium/10 text-premium transition duration-300 group-hover:bg-premium group-hover:text-white group-hover:shadow-[0_8px_20px_-6px_rgb(232_90_40/0.45)]"
         aria-hidden
       >
-        <div className="absolute -inset-px rounded-none bg-[radial-gradient(circle_at_50%_0%,rgb(16_138_95/0.14),transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        <Icon className="relative size-5" strokeWidth={1.35} />
+        <Icon
+          className="relative size-5 transition-transform duration-300 group-hover:scale-110"
+          strokeWidth={1.35}
+        />
       </div>
       <h2 className="font-display text-lg font-bold leading-snug tracking-tight text-[#111111] sm:text-[1.125rem]">
         {title}
       </h2>
       <p className="mt-3 flex-1 text-sm leading-relaxed text-[#6b6b6b]">{body}</p>
+      {/* Akzentlinie am Kartenfuß */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-premium/70 to-premium/20 transition-transform duration-500 ease-out group-hover:scale-x-100"
+      />
     </motion.article>
   );
 }
@@ -154,11 +190,11 @@ export default function PartnerPage() {
       {/* Page-local depth layers */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[min(92vh,880px)] bg-[radial-gradient(ellipse_90%_60%_at_50%_-8%,rgb(255_255_255/0.95),transparent_62%)]"
+        className="partner-page-top-glow pointer-events-none fixed inset-x-0 top-0 z-[1] h-[min(92vh,880px)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-[20%] top-[6%] h-[420px] w-[min(70vw,520px)] rounded-full bg-[radial-gradient(circle,rgb(16_138_95/0.07),transparent_68%)] blur-3xl"
+        className="pointer-events-none absolute -right-[20%] top-[6%] h-[420px] w-[min(70vw,520px)] rounded-full bg-[radial-gradient(circle,rgb(232_90_40/0.06),transparent_68%)] blur-3xl"
       />
       <div
         aria-hidden
@@ -168,56 +204,77 @@ export default function PartnerPage() {
       <div className="relative mx-auto max-w-6xl px-5 pb-28 lg:px-8">
         {/* ——— Hero ——— */}
         <section className="relative pt-6 sm:pt-10 lg:pt-14">
+          {/* Punktraster hinter dem Hero */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-6 h-[28rem] opacity-60 [background-image:radial-gradient(rgb(17_17_17/0.05)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_60%_70%_at_50%_0%,black,transparent)]"
+          />
+
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease }}
-            className="mx-auto max-w-4xl text-center lg:max-w-5xl"
+            className="relative mx-auto max-w-4xl text-center lg:max-w-5xl"
           >
-            <SectionLabel>Händlernetzwerk</SectionLabel>
+            <SectionLabel centered>Händlernetzwerk</SectionLabel>
 
             <h1 className="text-balance-safe mt-5 font-display text-[clamp(2rem,5.8vw,3.5rem)] font-extrabold leading-[1.06] tracking-[-0.04em] text-[#111111]">
-              Qualifizierte Gebrauchtwagen-Anfragen statt anonymer Portal-Leads.
+              Qualifizierte{" "}
+              <span className="text-premium">Gebrauchtwagen-Anfragen</span> statt anonymer
+              Portal-Leads.
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-[#6b6b6b] sm:text-lg sm:leading-[1.65]">
+            <motion.p
+              initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.6, delay: 0.14, ease }}
+              className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-[#6b6b6b] sm:text-lg sm:leading-[1.65]"
+            >
               Kunden mit konkreter Kaufabsicht, Budget und Kontext — persönlich vorqualifiziert statt
               wahllos verteilt.
-            </p>
+            </motion.p>
 
-            <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.22, ease }}
+              className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-4"
+            >
               <Button
                 type="button"
                 onClick={() => scrollToSection("partner-werden")}
-                className="h-12 rounded-none border-0 bg-cta-navy px-8 text-sm font-bold tracking-tight text-white shadow-[0_4px_18px_rgba(17,17,17,0.16)] transition hover:bg-cta-navy-hover hover:shadow-[0_8px_28px_rgba(17,17,17,0.2)]"
+                className="group h-12 rounded-sm border-0 bg-cta-navy px-8 text-sm font-bold tracking-tight text-white shadow-cta transition duration-200 hover:-translate-y-0.5 hover:bg-cta-navy-hover shadow-cta-hover"
               >
                 Partner werden
-                <ArrowRight className="ml-1 size-4 opacity-80 transition group-hover/button:translate-x-0.5" />
+                <ArrowRight className="ml-1 size-4 opacity-90 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => scrollToSection("so-funktionierts")}
-                className="h-12 rounded-none border-[#111111]/12 bg-white/80 px-8 text-sm font-semibold text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] backdrop-blur-sm transition hover:border-premium/30 hover:bg-white"
+                className="h-12 rounded-sm border-[#111111]/12 bg-white/80 px-8 text-sm font-semibold text-[#111111] shadow-[0_1px_2px_rgba(17,17,17,0.04)] backdrop-blur-sm transition hover:border-premium/30 hover:bg-white"
               >
                 So funktioniert&apos;s
               </Button>
-            </div>
+            </motion.div>
 
             <ul className="mx-auto mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-3 text-left sm:gap-x-8">
-              {trustChips.map((item) => (
-                <li
+              {trustChips.map((item, i) => (
+                <motion.li
                   key={item}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.32 + 0.06 * i, ease }}
                   className="flex items-center gap-2 text-[13px] font-medium tracking-tight text-[#111111]/85"
                 >
                   <span
-                    className="flex size-5 shrink-0 items-center justify-center rounded-none bg-premium/10 text-premium"
+                    className="flex size-5 shrink-0 items-center justify-center rounded-sm bg-premium/10 text-premium"
                     aria-hidden
                   >
                     <Check className="size-3" strokeWidth={2.5} />
                   </span>
                   {item}
-                </li>
+                </motion.li>
               ))}
             </ul>
           </motion.div>
@@ -225,21 +282,28 @@ export default function PartnerPage() {
 
         {/* ——— Trust bar ——— */}
         <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.15, ease }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4, ease }}
           className="mx-auto mt-14 max-w-5xl sm:mt-16"
           aria-label="Vertrauensmerkmale"
         >
-          <div className="relative overflow-hidden rounded-none border border-[#111111]/[0.06] bg-white/70 px-4 py-4 shadow-[0_1px_0_rgb(255_255_255/0.9)_inset,0_8px_32px_-12px_rgba(17,17,17,0.08)] backdrop-blur-md sm:px-6">
+          <div className="relative overflow-hidden rounded-sm border border-[#111111]/[0.06] bg-white/70 px-4 py-4 shadow-[0_1px_0_rgb(255_255_255/0.9)_inset,0_8px_32px_-12px_rgba(17,17,17,0.08)] backdrop-blur-md sm:px-6">
+            <div
+              aria-hidden
+              className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-premium/35 to-transparent"
+            />
             <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-[#f8f8f7] to-transparent sm:w-20" />
             <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#f8f8f7] to-transparent sm:w-20" />
-            <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 sm:justify-between sm:gap-x-4">
-              {trustBarItems.map((item) => (
+            <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 sm:justify-between sm:gap-x-4">
+              {trustBarItems.map((item, i) => (
                 <li
                   key={item}
-                  className="whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.16em] text-[#6b6b6b] sm:text-[10px] sm:tracking-[0.18em]"
+                  className="flex items-center gap-3 whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.16em] text-[#6b6b6b] sm:text-[10px] sm:tracking-[0.18em]"
                 >
+                  {i > 0 ? (
+                    <span aria-hidden className="hidden size-1 rounded-full bg-premium/50 sm:block" />
+                  ) : null}
                   {item}
                 </li>
               ))}
@@ -250,9 +314,10 @@ export default function PartnerPage() {
         {/* ——— Features ——— */}
         <section className="relative mt-24 sm:mt-28 lg:mt-32">
           <div className="mx-auto max-w-2xl text-center">
-            <SectionLabel>Warum Partner werden</SectionLabel>
+            <SectionLabel centered>Warum Partner werden</SectionLabel>
             <h2 className="text-balance-safe mt-4 font-display text-[clamp(1.5rem,3.5vw,2.25rem)] font-bold leading-tight tracking-tight text-[#111111]">
-              Qualität vor Quantität — für Händler, die Abschlüsse wollen, nicht Klicks.
+              Qualität vor Quantität — für Händler, die{" "}
+              <span className="text-premium">Abschlüsse</span> wollen, nicht Klicks.
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-[#6b6b6b] sm:text-base">
               Partner für moderne Gebrauchtwagen-Sourcing-Anfragen — mit Vermittlung statt
@@ -279,7 +344,7 @@ export default function PartnerPage() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-premium/25 to-transparent"
+            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-premium/40 to-transparent"
           />
           <div
             aria-hidden
@@ -296,7 +361,7 @@ export default function PartnerPage() {
                 Digitale Anfragen mit Kontext — statt anonymer Lead-Flut aus dem Portal. Jeder Schritt
                 ist auf Passung ausgelegt, nicht auf Volumen.
               </p>
-              <div className="mt-8 hidden items-center gap-3 rounded-none border border-[#111111]/[0.06] bg-[#f8f8f7]/80 p-5 lg:flex">
+              <div className="mt-8 hidden items-center gap-3 rounded-sm border border-premium/15 bg-gradient-to-br from-premium/[0.05] to-transparent p-5 lg:flex">
                 <Building2 className="size-5 shrink-0 text-premium" strokeWidth={1.35} />
                 <p className="text-sm leading-relaxed text-[#6b6b6b]">
                   <span className="font-semibold text-[#111111]">Exklusives Netzwerk:</span> Wir
@@ -306,39 +371,61 @@ export default function PartnerPage() {
               </div>
             </div>
 
-            <ol className="space-y-4">
-              {processSteps.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <motion.li
-                    key={step.title}
-                    initial={{ opacity: 0, x: 12 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.45, delay: 0.06 * i, ease }}
-                    className="group flex gap-5 rounded-none border border-[#111111]/[0.06] bg-white/85 p-6 shadow-premium-sm backdrop-blur-sm transition duration-300 hover:border-premium/20 hover:shadow-premium sm:gap-6 sm:p-7"
-                  >
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="font-mono text-[11px] font-medium tabular-nums tracking-wide text-[#9a9a9a]">
+            <div className="relative">
+              {/* Vertikale Verbindungslinie zwischen den Schritten */}
+              <div
+                aria-hidden
+                className="absolute bottom-10 left-[3.25rem] top-10 hidden border-l border-dashed border-premium/25 sm:block"
+              />
+              <ol className="relative space-y-4">
+                {processSteps.map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <motion.li
+                      key={step.title}
+                      initial={{ opacity: 0, x: 12 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-40px" }}
+                      transition={{ duration: 0.45, delay: 0.06 * i, ease }}
+                      className="group relative flex gap-5 overflow-hidden rounded-sm border border-[#111111]/[0.06] bg-white/85 p-6 shadow-premium-sm backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:border-premium/30 hover:shadow-premium sm:gap-6 sm:p-7"
+                    >
+                      {/* Ghost-Nummer */}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -top-2 right-3 select-none font-display text-[3.75rem] font-extrabold leading-none tracking-tighter text-[#111111]/[0.04] transition-colors duration-300 group-hover:text-premium/12"
+                      >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <div
-                        className="flex size-12 items-center justify-center rounded-none border border-[#111111]/[0.06] bg-[#f8f8f7] text-[#111111] transition duration-300 group-hover:border-premium/20 group-hover:text-premium"
-                        aria-hidden
-                      >
-                        <Icon className="size-5" strokeWidth={1.35} />
+                      <div className="relative flex flex-col items-center gap-2">
+                        <span className="font-mono text-[11px] font-medium tabular-nums tracking-wide text-[#9a9a9a] transition-colors duration-300 group-hover:text-premium/70">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div
+                          className="flex size-12 items-center justify-center rounded-sm bg-premium/10 text-premium transition duration-300 group-hover:bg-premium group-hover:text-white group-hover:shadow-[0_8px_20px_-6px_rgb(232_90_40/0.45)]"
+                          aria-hidden
+                        >
+                          <Icon
+                            className="size-5 transition-transform duration-300 group-hover:scale-110"
+                            strokeWidth={1.35}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="min-w-0 pt-0.5">
-                      <h3 className="font-display text-lg font-semibold tracking-tight text-[#111111]">
-                        {step.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">{step.body}</p>
-                    </div>
-                  </motion.li>
-                );
-              })}
-            </ol>
+                      <div className="min-w-0 pt-0.5">
+                        <h3 className="font-display text-lg font-semibold tracking-tight text-[#111111]">
+                          {step.title}
+                        </h3>
+                        <p className="mt-2 text-sm leading-relaxed text-[#6b6b6b]">{step.body}</p>
+                      </div>
+                      {/* Akzentlinie am Kartenfuß */}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-premium/70 to-premium/20 transition-transform duration-500 ease-out group-hover:scale-x-100"
+                      />
+                    </motion.li>
+                  );
+                })}
+              </ol>
+            </div>
           </div>
         </section>
 
@@ -349,7 +436,7 @@ export default function PartnerPage() {
         >
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#111111]/10 to-transparent"
+            className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-premium/30 to-transparent"
           />
 
           <motion.div
@@ -357,17 +444,19 @@ export default function PartnerPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, ease }}
-            className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10"
+            className="grid gap-8 pt-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10"
           >
-            <div className="relative overflow-hidden rounded-none border border-[#111111]/[0.06] bg-white/92 p-6 shadow-tech backdrop-blur-sm sm:p-9 lg:p-10">
+            <div className="relative overflow-hidden rounded-sm border border-[#111111]/[0.06] bg-white/92 p-6 shadow-premium backdrop-blur-sm sm:p-9 lg:p-10">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(16_138_95/0.08),transparent_70%)]"
+                className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgb(232_90_40/0.07),transparent_70%)]"
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-premium/40 to-transparent"
               />
 
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-premium">
-                Trusted Partner Application
-              </p>
+              <SectionLabel>Trusted Partner Application</SectionLabel>
               <h2 className="mt-3 font-display text-[clamp(1.5rem,3vw,2rem)] font-bold tracking-tight text-[#111111]">
                 Kurz vorstellen
               </h2>
@@ -381,7 +470,13 @@ export default function PartnerPage() {
             </div>
 
             <aside className="flex flex-col gap-5 lg:pt-2">
-              <div className="rounded-none border border-[#111111]/[0.06] bg-[#f8f8f7]/90 p-6 shadow-premium-sm backdrop-blur-sm sm:p-7">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: 0.1, ease }}
+                className="rounded-sm border border-[#111111]/[0.06] bg-[#f8f8f7]/90 p-6 shadow-premium-sm backdrop-blur-sm sm:p-7"
+              >
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6b6b6b]">
                   Aktuell besonders gefragt
                 </p>
@@ -389,7 +484,7 @@ export default function PartnerPage() {
                   {inDemand.map((tag) => (
                     <li
                       key={tag}
-                      className="rounded-none border border-[#111111]/[0.08] bg-white px-3 py-1.5 text-sm font-medium tracking-tight text-[#111111]"
+                      className="rounded-sm border border-[#111111]/[0.08] bg-white px-3 py-1.5 text-sm font-medium tracking-tight text-[#111111] transition-colors duration-300 hover:border-premium/40"
                     >
                       {tag}
                     </li>
@@ -398,9 +493,15 @@ export default function PartnerPage() {
                 <p className="mt-5 text-sm leading-relaxed text-[#6b6b6b]">
                   Spezialisierung hilft uns, Anfragen passgenau zuzuordnen — ohne starre Kategorien.
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="rounded-none border border-premium/15 bg-gradient-to-br from-premium/[0.06] to-transparent p-6 sm:p-7">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: 0.18, ease }}
+                className="rounded-sm border border-premium/15 bg-gradient-to-br from-premium/[0.06] to-transparent p-6 sm:p-7"
+              >
                 <div className="flex items-start gap-3">
                   <MapPin className="mt-0.5 size-5 shrink-0 text-premium" strokeWidth={1.35} />
                   <div>
@@ -413,9 +514,9 @@ export default function PartnerPage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-center gap-3 rounded-none border border-[#111111]/[0.06] bg-white/80 p-5 lg:hidden">
+              <div className="flex items-center gap-3 rounded-sm border border-[#111111]/[0.06] bg-white/80 p-5 lg:hidden">
                 <Building2 className="size-5 shrink-0 text-premium" strokeWidth={1.35} />
                 <p className="text-sm leading-relaxed text-[#6b6b6b]">
                   <span className="font-semibold text-[#111111]">Exklusives Netzwerk</span> — persönliche
@@ -433,7 +534,7 @@ export default function PartnerPage() {
           <Button
             type="button"
             onClick={() => scrollToSection("partner-werden")}
-            className="h-12 w-full rounded-none border-0 bg-cta-navy text-sm font-bold text-white shadow-[0_8px_32px_rgba(17,17,17,0.22)] backdrop-blur-sm"
+            className="h-12 w-full rounded-sm border-0 bg-cta-navy text-sm font-bold text-white shadow-cta backdrop-blur-sm"
           >
             Partner werden
           </Button>

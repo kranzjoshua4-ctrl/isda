@@ -29,7 +29,7 @@ const business = {
 
 function SectionIcon({ children }: { children: React.ReactNode }) {
   return (
-    <span className="flex size-10 shrink-0 items-center justify-center rounded-none border border-tech/35 bg-gradient-to-b from-tech/20 to-tech/5 text-tech shadow-[inset_0_1px_0_0_oklch(1_0_0/0.12)] transition duration-300 group-hover:border-tech/55 group-hover:from-tech/30 group-hover:to-tech/10 group-hover:shadow-[0_0_20px_-4px_oklch(0.42_0.09_252/0.45)]">
+    <span className="flex size-10 shrink-0 items-center justify-center rounded-sm bg-premium/10 text-premium transition duration-300 group-hover:bg-premium/15">
       {children}
     </span>
   );
@@ -52,12 +52,12 @@ function ImpressumSection({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className="group scroll-mt-24 rounded-none border border-border/90 bg-card/35 px-5 py-6 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-tech/40 hover:bg-card/55 hover:shadow-[0_0_36px_-12px_oklch(0.42_0.09_252/0.22)] sm:px-6 sm:py-7"
+      className="group scroll-mt-24 rounded-sm border border-border bg-white px-5 py-6 shadow-sm transition-all duration-300 hover:shadow-[0_10px_30px_rgb(17_17_17/0.05)] sm:px-6 sm:py-7"
     >
       <div className="flex gap-4">
         <SectionIcon>{icon}</SectionIcon>
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-tech/85">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-premium">
             {String(n).padStart(2, "0")}
           </p>
           <h2
@@ -103,11 +103,11 @@ export default function ImpressumPage() {
 
       <div className="relative min-h-[calc(100vh-8rem)] px-4 pb-20 pt-10 text-foreground sm:px-6 sm:pt-14">
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-80 max-w-3xl bg-[radial-gradient(ellipse_75%_55%_at_50%_-25%,oklch(0.48_0.11_252/0.28),transparent_62%)]"
+          className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-80 max-w-3xl bg-[radial-gradient(ellipse_75%_55%_at_50%_-25%,rgb(17_17_17/0.04),transparent_62%)]"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-48 max-w-2xl bg-[radial-gradient(ellipse_90%_80%_at_50%_120%,oklch(0.38_0.06_260/0.12),transparent_55%)]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-48 max-w-2xl bg-[radial-gradient(ellipse_90%_80%_at_50%_120%,rgb(17_17_17/0.04),transparent_55%)]"
           aria-hidden
         />
 
@@ -121,7 +121,7 @@ export default function ImpressumPage() {
           <meta itemProp="vatID" content={business.vatId} />
 
           <header className="mb-10 text-center">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-tech">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-premium">
               Rechtliche Hinweise
             </p>
             <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance text-foreground sm:text-4xl">
@@ -133,7 +133,7 @@ export default function ImpressumPage() {
             </p>
           </header>
 
-          <div className="rounded-none border border-border/90 bg-card/50 p-5 shadow-tech-lg backdrop-blur-2xl ring-1 ring-tech/15 sm:p-8 md:p-10">
+          <div className="rounded-sm border border-border bg-white/80 p-5 shadow-[0_10px_30px_rgb(17_17_17/0.05)] backdrop-blur-2xl sm:p-8 md:p-10">
             <div className="space-y-4 sm:space-y-5">
               <ImpressumSection
                 id="tmg"
@@ -180,18 +180,18 @@ export default function ImpressumPage() {
                 icon={<Mail className="size-4" strokeWidth={1.75} aria-hidden />}
               >
                 <p className="flex flex-wrap items-start gap-2">
-                  <MapPin className="mt-0.5 size-4 shrink-0 text-tech" aria-hidden />
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-premium" aria-hidden />
                   <span>
                     <span className="font-medium text-foreground/90">Postanschrift:</span> siehe oben
                     unter § 5 TMG.
                   </span>
                 </p>
                 <p className="flex flex-wrap items-start gap-2">
-                  <Mail className="mt-0.5 size-4 shrink-0 text-tech" aria-hidden />
+                  <Mail className="mt-0.5 size-4 shrink-0 text-premium" aria-hidden />
                   <span>
                     <span className="font-medium text-foreground/90">E-Mail:</span>{" "}
                     <a
-                      className="rounded-none font-medium text-tech underline decoration-tech/50 underline-offset-4 transition hover:text-tech hover:decoration-tech"
+                      className="rounded-sm font-medium text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
                       href="mailto:kontakt@ichsuchdeinauto.de"
                     >
                       kontakt@ichsuchdeinauto.de
@@ -200,13 +200,13 @@ export default function ImpressumPage() {
                     Onlineangebot)
                   </span>
                 </p>
-                <p className="rounded-none border border-tech/20 bg-tech/[0.06] px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
+                <p className="rounded-sm border border-border bg-[#fafafa] px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
                   Hinweis: Vertragliche oder buchhalterische Anfragen bitte eindeutig an den oben
                   genannten Anbieter adressieren. Informationen zur Datenverarbeitung finden Sie in
                   unserer{" "}
                   <Link
                     href="/datenschutz"
-                    className="font-medium text-foreground/80 underline decoration-tech/30 underline-offset-2 transition hover:text-tech"
+                    className="font-medium text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
                   >
                     Datenschutzerklärung
                   </Link>
@@ -221,7 +221,7 @@ export default function ImpressumPage() {
                 icon={<Landmark className="size-4" strokeWidth={1.75} aria-hidden />}
               >
                 <p className="flex flex-wrap items-start gap-2">
-                  <Hash className="mt-0.5 size-4 shrink-0 text-tech" aria-hidden />
+                  <Hash className="mt-0.5 size-4 shrink-0 text-premium" aria-hidden />
                   <span>
                     <span className="font-medium text-foreground/90">Steuernummer:</span>{" "}
                     <span className="font-mono text-sm text-foreground/80">{business.taxId}</span>{" "}
@@ -229,7 +229,7 @@ export default function ImpressumPage() {
                   </span>
                 </p>
                 <p className="flex flex-wrap items-start gap-2">
-                  <FileText className="mt-0.5 size-4 shrink-0 text-tech" aria-hidden />
+                  <FileText className="mt-0.5 size-4 shrink-0 text-premium" aria-hidden />
                   <span>
                     <span className="font-medium text-foreground/90">Umsatzsteuer-Identifikationsnummer:</span>{" "}
                     <span className="font-mono text-sm text-foreground/80">{business.vatId}</span>{" "}
@@ -318,14 +318,14 @@ export default function ImpressumPage() {
                 {" · "}
                 <Link
                   href="/datenschutz"
-                  className="text-foreground/70 underline decoration-tech/25 underline-offset-4 transition hover:text-tech"
+                  className="text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
                 >
                   Datenschutz
                 </Link>
                 {" · "}
                 <Link
                   href="/kontakt"
-                  className="text-foreground/70 underline decoration-tech/25 underline-offset-4 transition hover:text-tech"
+                  className="text-[#111111] underline decoration-[#d8d8d8] underline-offset-2 transition hover:decoration-premium/60"
                 >
                   Kontakt
                 </Link>

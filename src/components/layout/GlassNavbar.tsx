@@ -49,6 +49,9 @@ export function GlassNavbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [pathname]);
 
+  const matchPageBackground = pathname === "/partner";
+  const alignPortalWithSearch = pathname === "/";
+
   const onNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (handleMainNavClick(e, href, { pathname, setHash })) {
       return;
@@ -68,20 +71,29 @@ export function GlassNavbar() {
     >
       <motion.div
         aria-hidden
-        className="nav-bar-scroll-bg pointer-events-none absolute inset-0"
+        className={cn(
+          "pointer-events-none absolute inset-0",
+          matchPageBackground ? "nav-bar-page-bg--partner" : "nav-bar-scroll-bg",
+          matchPageBackground && scrolled && "nav-bar-scroll-bg--scrolled",
+        )}
         initial={false}
         animate={{
-          opacity: scrolled ? 1 : 0,
-          y: scrolled ? 0 : -6,
+          opacity: matchPageBackground || scrolled ? 1 : 0,
+          y: matchPageBackground || scrolled ? 0 : -6,
         }}
         transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       />
-      <div className="page-container relative z-10 flex min-h-[3.75rem] items-center py-3 sm:min-h-[4rem]">
+      <div
+        className={cn(
+          "page-container relative z-10 flex min-h-[3.75rem] items-center py-3 sm:min-h-[4rem]",
+          alignPortalWithSearch && "nav-bar__inner--home-align",
+        )}
+      >
         <Link
           href="/"
           scroll={false}
           onClick={(e) => onNavClick(e, "/")}
-          className="group flex shrink-0 items-center gap-2 leading-none"
+          className="nav-bar__brand group flex shrink-0 items-center gap-2 leading-none"
           aria-label="ichsuchdeinauto.de — Startseite"
         >
           <span className="flex size-8 items-center justify-center rounded-md border border-border bg-[#fafafa] text-[#111111] transition group-hover:border-premium/30">
@@ -108,7 +120,7 @@ export function GlassNavbar() {
                     scroll={false}
                     onClick={(e) => onNavClick(e, l.href)}
                     className={cn(
-                      "relative pb-1 text-[13px] font-medium tracking-tight transition-colors",
+                      "relative pb-1 text-[14px] font-medium tracking-tight transition-colors lg:text-[15px]",
                       active ? "text-[#111111]" : "text-[#6b6b6b] hover:text-[#111111]",
                     )}
                   >
@@ -128,7 +140,7 @@ export function GlassNavbar() {
           scroll={false}
           onClick={(e) => onNavClick(e, "/partner/portal")}
           className={cn(
-            "ml-auto inline-flex h-9 items-center gap-2 rounded-md border-0 bg-cta-navy px-3 text-[12px] font-semibold text-white shadow-cta transition duration-200 hover:bg-cta-navy-hover sm:h-10 sm:px-3.5 sm:text-[13px]",
+            "nav-bar__portal ml-auto inline-flex h-10 shrink-0 items-center gap-2 rounded-sm border-0 bg-cta-navy px-4 text-[12px] font-bold text-white shadow-cta transition duration-200 hover:bg-cta-navy-hover sm:px-5 sm:text-[13px]",
             pathname === "/partner/portal" && "ring-2 ring-white/30",
           )}
         >

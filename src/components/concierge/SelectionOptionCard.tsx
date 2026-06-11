@@ -31,8 +31,8 @@ export function SelectionOptionCard({
       className={cn(
         "group/card flex w-full flex-col items-center justify-center text-center transition-[background-color,border-color,box-shadow,transform] duration-250 ease-out",
         isBrandLogo
-          ? "min-h-[3.75rem] gap-1 rounded-sm border bg-white px-1.5 py-2.5 shadow-[0_2px_8px_rgba(17,17,17,0.04)] lg:min-h-[3.5rem] lg:px-2 lg:py-2"
-          : "min-h-[5rem] gap-0.5 rounded-sm border px-2.5 py-2",
+          ? "min-h-[6.25rem] gap-2 rounded-sm border bg-white px-1.5 py-3 shadow-[0_2px_8px_rgba(17,17,17,0.04)] lg:min-h-[6rem] lg:px-2 lg:py-3"
+          : "min-h-[4.75rem] gap-1.5 rounded-sm border px-2.5 py-2.5 sm:min-h-[5rem]",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium/35 focus-visible:ring-offset-2",
         selected
           ? option.logoSrc
@@ -49,9 +49,9 @@ export function SelectionOptionCard({
             "relative flex w-full shrink-0 items-center justify-center leading-[0]",
             isVehicleBadge(option.logoSize)
               ? option.logoSize === "badge-lg"
-                ? "h-[5.5rem] max-w-[10.5rem]"
-                : "h-[4.75rem] max-w-[9rem]"
-              : "mx-auto flex h-9 w-full max-w-[5rem] items-center justify-center",
+                ? "h-[4.75rem] max-w-[9.25rem]"
+                : "h-[4.1rem] max-w-[8rem]"
+              : "mx-auto flex h-[3.25rem] w-full max-w-[7rem] items-center justify-center",
           )}
           aria-hidden
         >
@@ -64,9 +64,11 @@ export function SelectionOptionCard({
               "mx-auto block object-contain object-center transition-transform duration-250 ease-out",
               isVehicleBadge(option.logoSize)
                 ? option.logoImgClassName
-                  ? "h-auto w-auto max-h-[3rem] max-w-[6rem]"
+                  ? "h-auto w-auto max-h-[2.6rem] max-w-[5.4rem]"
                   : "h-full w-full"
-                : "h-9 w-auto max-w-[4.75rem]",
+                : option.logoSize === "sm"
+                  ? "h-[2.5rem] w-auto max-w-[5.25rem]"
+                  : "h-[3.25rem] w-auto max-w-[6.5rem]",
               !selected && "group-hover/card:scale-105",
               option.logoImgClassName,
             )}
@@ -74,7 +76,16 @@ export function SelectionOptionCard({
             decoding="async"
           />
         </span>
-      ) : (
+      ) : option.lucideIcon ? (
+        <option.lucideIcon
+          className={cn(
+            "mx-auto block size-[1.25rem] transition-[transform,color] duration-250 ease-out",
+            selected ? "text-white" : "text-[#4a4a4a] group-hover/card:scale-105",
+          )}
+          strokeWidth={1.65}
+          aria-hidden
+        />
+      ) : option.icon ? (
         <span
           className={cn(
             "text-[1.5rem] leading-[0.85] transition-transform duration-250 ease-out",
@@ -84,12 +95,14 @@ export function SelectionOptionCard({
         >
           {option.icon}
         </span>
-      )}
+      ) : null}
       <span
         className={cn(
-          "shrink-0 text-[11px] font-semibold leading-tight tracking-tight",
+          "shrink-0 leading-tight tracking-tight",
+          isBrandLogo
+            ? "text-[12.5px] font-semibold text-[#111111]"
+            : "text-[11px] font-semibold",
           selected && !option.logoSrc ? "text-white" : "text-[#111111]",
-          isBrandLogo && "sr-only",
         )}
       >
         {option.label}

@@ -1,10 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 
-/** Premium Keyvisual — Audi vorne, Renault subtil im Hintergrund (Desktop). */
+/** Premium Keyvisual — Passat vorne, Dacia subtil im Hintergrund (Desktop). */
 export function HeroVisual() {
+  const { scrollY } = useScroll();
+  const carY = useTransform(scrollY, [0, 600], [0, 18]);
+
   return (
     <div className="hero-visual">
       <div className="hero-visual__stage" aria-hidden>
@@ -15,7 +18,7 @@ export function HeroVisual() {
           className="hero-visual__renault-wrap"
         >
           <Image
-            src="/Herobilder/hero-1.png"
+            src="/Herobilder/hero_dacia3.png"
             alt=""
             width={850}
             height={415}
@@ -27,11 +30,13 @@ export function HeroVisual() {
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="hero-visual__car-wrap"
+          style={{ y: carY }}
         >
+          <span className="hero-visual__car-glow" aria-hidden />
           <Image
-            src="/Herobilder/hero-2.png"
+            src="/Herobilder/hero_passat.png"
             alt=""
             width={960}
             height={540}

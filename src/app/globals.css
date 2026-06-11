@@ -71,13 +71,13 @@
   --muted-foreground: #6b6b6b;
   --accent: #eae9e7;
   --accent-foreground: #111111;
-  --premium: #e85a28;
+  --premium: #d54e22;
   --premium-foreground: #ffffff;
-  --premium-light: #f07040;
-  --premium-hover: #d14e1f;
-  --tech: #e85a28;
+  --premium-light: #e86a3f;
+  --premium-hover: #bf431c;
+  --tech: #d54e22;
   --tech-foreground: #ffffff;
-  --tech-accent: #f07848;
+  --tech-accent: #e86a3f;
   --destructive: oklch(0.55 0.22 25);
   --border: rgb(17 17 17 / 8%);
   --input: #ecebea;
@@ -113,11 +113,11 @@
   --muted-foreground: oklch(0.68 0.02 90);
   --accent: oklch(0.24 0.02 80);
   --accent-foreground: oklch(0.97 0.01 90);
-  --premium: #e85a28;
+  --premium: #d54e22;
   --premium-foreground: #ffffff;
-  --tech: #e85a28;
+  --tech: #d54e22;
   --tech-foreground: #ffffff;
-  --tech-accent: #f07848;
+  --tech-accent: #e86a3f;
   --destructive: oklch(0.65 0.2 22);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 12%);
@@ -246,13 +246,13 @@
     background-color: var(--premium-hover);
   }
   .shadow-cta {
-    box-shadow: 0 10px 24px rgb(232 90 40 / 22%);
+    box-shadow: 0 10px 24px rgb(213 78 34 / 22%);
   }
   .shadow-cta-hover:hover {
-    box-shadow: 0 14px 32px rgb(232 90 40 / 28%);
+    box-shadow: 0 14px 32px rgb(213 78 34 / 28%);
   }
   .shadow-cta-gold {
-    box-shadow: 0 10px 28px rgb(232 90 40 / 28%);
+    box-shadow: 0 10px 28px rgb(213 78 34 / 28%);
   }
   .text-premium {
     color: var(--premium);
@@ -265,6 +265,50 @@
     );
     border-bottom: 1px solid rgb(17 17 17 / 7%);
     box-shadow: 0 6px 24px rgb(17 17 17 / 5%);
+  }
+  /* Partner werden: Verlauf unter der Nav (fixed, z-1) */
+  .partner-page-top-glow {
+    background: radial-gradient(
+      ellipse 90% 60% at 50% -8%,
+      rgb(255 255 255 / 0.95),
+      transparent 62%
+    );
+  }
+  /* Partner-Nav: transparent oben, damit kein sichtbarer Balken entsteht */
+  .nav-bar-page-bg--partner {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    box-shadow: none;
+  }
+  /* Startseite: Partner-Portal sitzt via ml-auto auf der Container-Kante —
+     der Such-Split endet jetzt ebenfalls dort, also kein Offset mehr nötig */
+  .funnel-budget-range {
+    height: 1.5rem;
+  }
+  .funnel-budget-range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: transparent;
+  }
+  .funnel-budget-range::-moz-range-track {
+    height: 6px;
+    border-radius: 9999px;
+    background: transparent;
+  }
+  .funnel-budget-range::-webkit-slider-thumb {
+    margin-top: -7px;
+  }
+  .nav-bar-page-bg--partner.nav-bar-scroll-bg--scrolled {
+    background-color: rgb(214 213 210 / 0.88);
+    background-image: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.72) 0%,
+      rgb(214 213 210 / 0.88) 100%
+    );
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom-color: rgb(17 17 17 / 6%);
+    box-shadow: 0 4px 16px rgb(17 17 17 / 4%);
   }
   .app-store-btn {
     display: inline-flex;
@@ -349,6 +393,9 @@
   .hero-section--search {
     margin-top: 0;
     padding-top: 0;
+    /* Kein eigenes Inline-Padding: linke/rechte Kante = page-container,
+       damit Such-Split und Sektionen darunter bündig sind */
+    padding-inline: 0;
   }
   .hero-search-split {
     display: grid;
@@ -361,21 +408,96 @@
   }
   @media (min-width: 1024px) {
     .hero-search-split {
-      grid-template-columns: minmax(0, 44rem) minmax(300px, 30rem);
-      align-items: stretch;
-      justify-content: start;
+      /* Flexible Spalten (~44rem/30rem-Verhältnis), die die volle Breite
+         füllen — so schließt die Suchbox rechts bündig mit den Sektionen ab */
+      grid-template-columns: minmax(0, 1.45fr) minmax(300px, 1fr);
+      align-items: start;
+      justify-content: stretch;
       gap: 2rem;
     }
   }
   @media (min-width: 1280px) {
     .hero-search-split {
-      grid-template-columns: minmax(0, 46rem) minmax(320px, 32rem);
+      grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
       gap: 2.5rem;
     }
   }
   .hero-search-split__funnel,
   .hero-search-split__search {
     min-height: 0;
+  }
+  @media (min-width: 1024px) {
+    .hero-search-split {
+      --split-duration: 0.84s;
+      --split-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      transition:
+        grid-template-columns var(--split-duration) var(--split-ease),
+        gap var(--split-duration) var(--split-ease),
+        width var(--split-duration) var(--split-ease),
+        margin var(--split-duration) var(--split-ease),
+        justify-content var(--split-duration) var(--split-ease);
+    }
+    .hero-search-split[data-split-state="collapsed"] {
+      --split-duration: 0.5s;
+      --split-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hero-search-split__funnel,
+    .hero-search-split__search {
+      transition:
+        transform var(--split-duration, 0.84s) var(--split-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+        opacity 0.45s ease,
+        box-shadow 0.55s ease;
+    }
+    .hero-search-split--complete {
+      grid-template-columns: minmax(0, 14.5rem) minmax(280px, 30rem);
+      justify-content: center;
+      width: fit-content;
+      max-width: 100%;
+      margin-inline: auto;
+      gap: 1.5rem;
+    }
+    .hero-search-split--complete .hero-search-split__funnel {
+      transform-origin: left center;
+    }
+    .hero-search-split--complete .hero-search-split__search {
+      transform-origin: center center;
+    }
+    .hero-search-split--expanding .hero-search-split__funnel {
+      box-shadow: 0 10px 36px rgb(17 17 17 / 7%);
+    }
+    .hero-search-split--expanding .hero-search-split__search {
+      transition-delay: 0.06s;
+      box-shadow: 0 14px 40px rgb(17 17 17 / 8%);
+    }
+  }
+  @media (min-width: 1280px) {
+    .hero-search-split--complete {
+      grid-template-columns: minmax(0, 15rem) minmax(300px, 32rem);
+      gap: 2rem;
+    }
+  }
+  @media (min-width: 1100px) {
+    .hero-section--search .hero-search-split {
+      transition:
+        grid-template-columns var(--split-duration, 0.84s) var(--split-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+        gap var(--split-duration, 0.84s) var(--split-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+        width var(--split-duration, 0.84s) var(--split-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+        margin-left var(--split-duration, 0.84s) var(--split-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+        margin-right var(--split-duration, 0.84s) var(--split-ease, cubic-bezier(0.16, 1, 0.3, 1));
+    }
+    .hero-section--search .hero-search-split--complete {
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
+      max-width: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-search-split,
+    .hero-search-split__funnel,
+    .hero-search-split__search {
+      transition: none !important;
+    }
   }
   @media (min-width: 640px) {
     .hero-section--search {
@@ -389,7 +511,7 @@
   }
   @media (min-width: 1024px) {
     .hero-section--search {
-      margin-top: -9rem;
+      margin-top: -7rem;
     }
   }
   @media (min-width: 1100px) {
@@ -405,11 +527,20 @@
     .hero-section--search {
       padding-top: 0;
       padding-bottom: 0;
-      margin-top: -11rem;
+      padding-left: 0;
+      margin-top: -9rem;
     }
+    /* Gleiche Box wie .hero-content-align: links -1rem ausgleichen,
+       rechte Kante bleibt auf der Container-Kante */
     .hero-section--search .hero-search-split {
-      margin-left: -1.75rem;
-      width: calc(100% + 1.75rem);
+      margin-left: -1rem;
+      width: calc(100% + 1rem);
+    }
+    /* Direkt im page-container: 12px Hero-Padding gegenrechnen,
+       damit die linke Kante mit Headline + Such-Split fluchtet */
+    .hero-content-align {
+      margin-left: -1rem;
+      width: calc(100% + 1rem);
     }
   }
   .hero-visual {
@@ -460,8 +591,25 @@
     filter: blur(0.2px) saturate(0.9);
   }
   .hero-visual__car-wrap {
-    filter: drop-shadow(0 50px 80px rgb(0 0 0 / 18%));
+    position: relative;
+    filter: drop-shadow(0 34px 60px rgb(0 0 0 / 14%));
   }
+  .hero-visual__car-glow {
+    position: absolute;
+    left: 22%;
+    right: 6%;
+    bottom: 6%;
+    height: 26%;
+    background: radial-gradient(
+      ellipse 60% 70% at 50% 50%,
+      rgb(213 78 34 / 0.1),
+      rgb(0 0 0 / 0.0) 68%
+    );
+    filter: blur(18px);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+  /* (ehem.) Lichthupe entfernt */
   .hero-visual__car {
     width: 100%;
     height: 100%;
@@ -477,25 +625,25 @@
     .hero-visual__renault-wrap {
       display: block;
       position: absolute;
-      left: -15%;
-      bottom: 320px;
+      left: -22%;
+      bottom: 205px;
       z-index: 2;
-      width: clamp(680px, 54vw, 850px);
-      height: clamp(305px, 44vh, 415px);
+      width: clamp(720px, 56vw, 900px);
+      height: clamp(320px, 46vh, 445px);
       opacity: 0.9;
-      transform: scale(1.28);
+      transform: scale(1.34);
       transform-origin: left bottom;
       filter: drop-shadow(0 14px 28px rgb(0 0 0 / 6%));
     }
     .hero-visual__car-wrap {
       position: absolute;
-      right: -72px;
-      bottom: 178px;
+      right: -94px;
+      bottom: 132px;
       z-index: 5;
-      width: clamp(780px, 55vw, 880px);
+      width: clamp(800px, 57vw, 920px);
       aspect-ratio: 16 / 9;
-      max-height: 94%;
-      transform: perspective(1800px) rotateY(-4deg) translateZ(0) scale(1.05);
+      max-height: 96%;
+      transform: perspective(1800px) rotateY(-4deg) translateZ(0) scale(1.06);
       transform-origin: right bottom;
     }
   }
@@ -503,11 +651,11 @@
     .hero-visual__car-wrap {
       position: relative;
       width: 100%;
-      max-width: 780px;
+      max-width: 770px;
       margin-inline: auto;
-      margin-top: 0.75rem;
+      margin-top: 1.25rem;
       aspect-ratio: 16 / 9;
-      transform: perspective(1800px) rotateY(-2deg) translateZ(0) scale(1.04);
+      transform: perspective(1800px) rotateY(-2deg) translateZ(0) scale(1.02);
       transform-origin: center bottom;
     }
     .hero-visual__car {
